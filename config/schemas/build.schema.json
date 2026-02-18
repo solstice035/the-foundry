@@ -1,0 +1,99 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://foundry.jeevesbot.io/schemas/build.v1.json",
+  "title": "Build Result",
+  "description": "Build outcome (output by Builder)",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "status",
+    "project_name",
+    "build_duration_seconds"
+  ],
+  "properties": {
+    "schema_version": {
+      "type": "integer",
+      "const": 1
+    },
+    "status": {
+      "type": "string",
+      "enum": ["success", "partial", "failed", "timeout"],
+      "description": "Build outcome"
+    },
+    "project_name": {
+      "type": "string",
+      "description": "Name of the project built"
+    },
+    "app_type": {
+      "type": "string",
+      "enum": ["cli", "web", "api", "library"]
+    },
+    "build_duration_seconds": {
+      "type": "integer",
+      "minimum": 0,
+      "description": "Total build time in seconds"
+    },
+    "aider_invocation": {
+      "type": "object",
+      "properties": {
+        "started_at": {"type": "string", "format": "date-time"},
+        "completed_at": {"type": "string", "format": "date-time"},
+        "exit_code": {"type": "integer"},
+        "timeout_triggered": {"type": "boolean"}
+      }
+    },
+    "repo_url": {
+      "type": ["string", "null"],
+      "format": "uri",
+      "description": "GitHub repo URL (null if push failed)"
+    },
+    "local_path": {
+      "type": "string",
+      "description": "Local project directory"
+    },
+    "commits_made": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "files_created": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "tests": {
+      "type": "object",
+      "properties": {
+        "readme_exists": {"type": "boolean"},
+        "readme_length_chars": {"type": "integer"},
+        "source_files_count": {"type": "integer"},
+        "dependencies_install": {
+          "type": "string",
+          "enum": ["success", "failed", "not_tested"]
+        },
+        "basic_execution": {
+          "type": "string",
+          "enum": ["success", "failed", "not_tested"]
+        }
+      }
+    },
+    "challenges_encountered": {
+      "type": "array",
+      "items": {"type": "string"},
+      "description": "Problems encountered during build"
+    },
+    "suggested_next_steps": {
+      "type": "array",
+      "items": {"type": "string"}
+    },
+    "build_log_path": {
+      "type": "string",
+      "description": "Path to detailed build log"
+    },
+    "build_log_size_kb": {
+      "type": "number"
+    },
+    "error": {
+      "type": "string",
+      "description": "Error message if build failed"
+    }
+  }
+}

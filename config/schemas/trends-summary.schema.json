@@ -1,0 +1,136 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://foundry.jeevesbot.io/schemas/trends-summary.v1.json",
+  "title": "Trends Summary",
+  "description": "Compact trend summary for Spec Writer (output by Trend Scout)",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "scan_date",
+    "sources_scanned",
+    "sources_succeeded",
+    "trends"
+  ],
+  "properties": {
+    "schema_version": {
+      "type": "integer",
+      "const": 1,
+      "description": "Schema version for compatibility"
+    },
+    "scan_date": {
+      "type": "string",
+      "format": "date-time",
+      "description": "When the scan started (ISO 8601)"
+    },
+    "sources_scanned": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "enum": ["hn", "reddit", "x", "github", "producthunt", "newsletters"]
+      },
+      "description": "All sources attempted"
+    },
+    "sources_succeeded": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "Sources that returned data"
+    },
+    "sources_failed": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["source", "error"],
+        "properties": {
+          "source": {"type": "string"},
+          "error": {"type": "string"},
+          "fallback_attempted": {"type": "boolean"}
+        }
+      },
+      "description": "Sources that failed with error details"
+    },
+    "data_quality": {
+      "type": "string",
+      "enum": ["excellent", "good", "degraded", "failed"],
+      "description": "Overall data quality based on source success rate"
+    },
+    "trends": {
+      "type": "array",
+      "maxItems": 15,
+      "items": {
+        "type": "object",
+        "required": [
+          "id",
+          "title",
+          "summary",
+          "buildability",
+          "engagement",
+          "sources",
+          "category"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "pattern": "^trend-[0-9]{8}-[0-9]{3}$",
+            "description": "Unique trend ID (trend-YYYYMMDD-NNN)"
+          },
+          "title": {
+            "type": "string",
+            "maxLength": 200,
+            "description": "Short trend title"
+          },
+          "summary": {
+            "type": "string",
+            "maxLength": 500,
+            "description": "One-line summary of the trend"
+          },
+          "buildability": {
+            "type": "number",
+            "minimum": 0,
+            "maximum": 10,
+            "description": "Buildability score (0-10)"
+          },
+          "engagement": {
+            "type": "number",
+            "minimum": 0,
+            "maximum": 200,
+            "description": "Normalized engagement score (0-100, amplified for cross-source)"
+          },
+          "sources": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "Platforms where this trend appeared"
+          },
+          "category": {
+            "type": "string",
+            "enum": [
+              "developer_cli_tools",
+              "web_apps",
+              "api_services",
+              "productivity",
+              "ai_ml_tools",
+              "devops",
+              "data_tools",
+              "other"
+            ],
+            "description": "Trend category"
+          },
+          "potential_stack": {
+            "type": "array",
+            "items": {"type": "string"},
+            "description": "Suggested tech stack"
+          },
+          "time_estimate_hours": {
+            "type": "number",
+            "minimum": 1,
+            "maximum": 10,
+            "description": "Estimated build time in hours"
+          }
+        }
+      }
+    }
+  }
+}

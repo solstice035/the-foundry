@@ -1,0 +1,128 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://foundry.jeevesbot.io/schemas/spec.v1.json",
+  "title": "Build Specification",
+  "description": "Build spec or rejection (output by Spec Writer)",
+  "type": "object",
+  "required": ["schema_version", "decision"],
+  "properties": {
+    "schema_version": {
+      "type": "integer",
+      "const": 1
+    },
+    "decision": {
+      "type": "string",
+      "enum": ["approved", "rejected"]
+    },
+    "selected_trend": {
+      "type": "object",
+      "description": "The trend that was selected (if approved)",
+      "required": ["title", "source", "rationale"],
+      "properties": {
+        "title": {"type": "string"},
+        "source": {"type": "string"},
+        "rationale": {"type": "string"}
+      }
+    },
+    "spec": {
+      "type": "object",
+      "description": "Detailed build spec (if approved)",
+      "required": [
+        "project_name",
+        "app_type",
+        "stack",
+        "features",
+        "scope",
+        "success_criteria"
+      ],
+      "properties": {
+        "project_name": {
+          "type": "string",
+          "pattern": "^[a-z0-9-]+$",
+          "description": "Lowercase, hyphen-separated project name"
+        },
+        "app_type": {
+          "type": "string",
+          "enum": ["cli", "web", "api", "library"]
+        },
+        "stack": {
+          "type": "array",
+          "items": {"type": "string"},
+          "description": "Technology stack (node, python, typescript, etc.)"
+        },
+        "features": {
+          "type": "array",
+          "items": {"type": "string"},
+          "description": "Features to implement"
+        },
+        "scope": {
+          "type": "object",
+          "required": ["must_have", "nice_to_have", "out_of_scope"],
+          "properties": {
+            "must_have": {
+              "type": "array",
+              "items": {"type": "string"}
+            },
+            "nice_to_have": {
+              "type": "array",
+              "items": {"type": "string"}
+            },
+            "out_of_scope": {
+              "type": "array",
+              "items": {"type": "string"}
+            }
+          }
+        },
+        "success_criteria": {
+          "type": "array",
+          "items": {"type": "string"},
+          "description": "Criteria for a successful build"
+        },
+        "estimated_hours": {
+          "type": "number",
+          "minimum": 1,
+          "maximum": 10
+        },
+        "risks": {
+          "type": "array",
+          "items": {"type": "string"}
+        }
+      }
+    },
+    "rejection_summary": {
+      "type": "object",
+      "description": "Rejection details (if rejected)",
+      "required": ["trends_reviewed", "top_rejections"],
+      "properties": {
+        "trends_reviewed": {"type": "integer"},
+        "top_rejections": {
+          "type": "array",
+          "maxItems": 5,
+          "items": {
+            "type": "object",
+            "required": ["title", "reason"],
+            "properties": {
+              "title": {"type": "string"},
+              "reason": {"type": "string"}
+            }
+          }
+        },
+        "what_would_work": {"type": "string"}
+      }
+    }
+  },
+  "oneOf": [
+    {
+      "properties": {
+        "decision": {"const": "approved"}
+      },
+      "required": ["selected_trend", "spec"]
+    },
+    {
+      "properties": {
+        "decision": {"const": "rejected"}
+      },
+      "required": ["rejection_summary"]
+    }
+  ]
+}

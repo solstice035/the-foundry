@@ -1,0 +1,88 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://foundry.jeevesbot.io/schemas/history.v1.json",
+  "title": "Build History",
+  "description": "Past builds and rejections for deduplication",
+  "type": "object",
+  "required": ["schema_version", "builds", "rejections", "dedup_window_days"],
+  "properties": {
+    "schema_version": {
+      "type": "integer",
+      "const": 1
+    },
+    "builds": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["date", "project_name", "title", "keywords", "status"],
+        "properties": {
+          "date": {
+            "type": "string",
+            "format": "date",
+            "description": "Build date (YYYY-MM-DD)"
+          },
+          "project_name": {
+            "type": "string",
+            "description": "Project name (from spec)"
+          },
+          "title": {
+            "type": "string",
+            "description": "Original trend title"
+          },
+          "keywords": {
+            "type": "array",
+            "items": {"type": "string"},
+            "description": "Extracted keywords for dedup matching"
+          },
+          "repo_url": {
+            "type": ["string", "null"],
+            "format": "uri"
+          },
+          "status": {
+            "type": "string",
+            "enum": ["success", "partial", "failed"]
+          },
+          "source": {
+            "type": "string",
+            "description": "Where the trend came from (hn, reddit, x)"
+          },
+          "category": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "rejections": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["date", "title", "reason", "keywords"],
+        "properties": {
+          "date": {
+            "type": "string",
+            "format": "date"
+          },
+          "title": {
+            "type": "string"
+          },
+          "reason": {
+            "type": "string",
+            "description": "Why it was rejected"
+          },
+          "keywords": {
+            "type": "array",
+            "items": {"type": "string"}
+          },
+          "source": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "dedup_window_days": {
+      "type": "integer",
+      "default": 14,
+      "description": "How many days to check for duplicates"
+    }
+  }
+}
