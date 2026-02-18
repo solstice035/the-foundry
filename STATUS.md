@@ -1,34 +1,35 @@
 # The Foundry - Current Status
 
-**Last Updated:** 2026-02-18 19:51 GMT  
+**Last Updated:** 2026-02-18 20:00 GMT  
 **Phase:** 1 - Core Build Pipeline  
-**Progress:** 0/16 epics complete (0%)
+**Progress:** 1/16 epics complete (6%)
 
 ---
 
 ## Current Work
 
-**Epic 1.1: Trend Scout - Data Collection** 🏗️  
-**Started:** 2026-02-18 19:30 GMT  
+**Epic 1.2: Trend Scout - Normalization & Scoring** 🏗️  
+**Started:** 2026-02-18 20:00 GMT  
 **Assignee:** The Blacksmith (foundry-blacksmith)  
-**Model:** Opus 4-6, 10-hour timeout  
-**Session:** agent:foundry-blacksmith:subagent:0e4ccc24-8295-4676-954e-04cca43bd0f8
+**Model:** Opus 4-6, 10-hour timeout
 
 **Objectives:**
-- Create workspace structure (`~/.openclaw/workspace/foundry/`)
-- Write foundry-scout task prompt (HN + Reddit + X sources)
-- Test data collection from all 3 sources
-- Produce test output: 30-50 trends in `trends-raw.json`
-- Commit all work to git
+- Engagement normalization (HN/Reddit → 0-100 scale)
+- Cross-source amplification (1.3x-2.0x boost)
+- Buildability scoring (5 dimensions, explicit rubric)
+- Auto-filters (political/crypto → reject)
+- Two-tier schema (summary for Spec Writer, full for debugging)
+- Cross-source deduplication
+- Output: trends-summary.json (15 trends) + trends-full/ (all)
 
-**Expected Completion:** ~8-10 hours from start
+**Expected Completion:** ~6-8 hours from start
 
 ---
 
 ## Phase 1 Epics (5 total)
 
-- 🏗️ **Epic 1.1:** Trend Scout - Data Collection (IN PROGRESS)
-- ⏸️ **Epic 1.2:** Trend Scout - Normalization & Scoring (BLOCKED: waiting for 1.1)
+- ✅ **Epic 1.1:** Trend Scout - Data Collection (COMPLETE - 10/11 criteria, X auth deferred)
+- 🏗️ **Epic 1.2:** Trend Scout - Normalization & Scoring (IN PROGRESS)
 - ⏸️ **Epic 1.3:** Spec Writer - Trend Selection (BLOCKED: waiting for 1.2)
 - ⏸️ **Epic 1.4:** Builder - Aider Integration (BLOCKED: waiting for 1.3)
 - ⏸️ **Epic 1.5:** Coordination & Morning Briefing (BLOCKED: waiting for 1.4)
@@ -41,6 +42,12 @@
 ---
 
 ## Recent Activity
+
+**2026-02-18 20:00 GMT:**
+- 🏗️ Epic 1.2 started (Normalization & Scoring)
+- ✅ Epic 1.1 complete (10/11 criteria, X auth deferred)
+- 📊 Test scan: 114 trends (HN: 70, Reddit: 44)
+- ⏸️ X/Twitter deferred (needs browser cookies, not blocking)
 
 **2026-02-18 19:51 GMT:**
 - 📝 Updated documentation with Epic 1.1 progress
