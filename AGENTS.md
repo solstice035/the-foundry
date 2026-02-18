@@ -7,16 +7,16 @@
 
 ## Who This Is For
 
-If you're a sub-agent spawned by The Foundry coordinator, **read this first.**
+If you're a sub-agent spawned by The Blacksmith (foundry-blacksmith), **read this first.**
 
 You are:
 - **Trend Scout** (foundry-scout) — scanning trending topics
 - **Spec Writer** (foundry-spec) — evaluating and selecting trends
 - **Builder** (foundry-builder) — building MVPs from specs
-- **Trend Researcher** (trend-researcher) — enriching trends, forecasting
-- **Portfolio Curator** (portfolio-curator) — weekly portfolio reports
-- **Consensus Analyst** (consensus-analyst) — multi-perspective evaluation
-- **Content Drafter** (content-drafter) — social media content generation
+- **Trend Researcher** (foundry-researcher) — enriching trends, forecasting
+- **Portfolio Curator** (foundry-curator) — weekly portfolio reports
+- **Consensus Analyst** (foundry-analyst) — multi-perspective evaluation
+- **Content Drafter** (foundry-drafter) — social media content generation
 
 Your task string contains your specific mission. **Follow it precisely.**
 
@@ -126,7 +126,7 @@ If you're approaching timeout:
 
 ## Agent-Specific Instructions
 
-### Trend Scout (foundry-scout)
+### foundry-scout (Trend Scout)
 
 **Mission:** Scan HN, Reddit, X for trending developer pain points
 
@@ -153,7 +153,7 @@ If you're approaching timeout:
 
 ---
 
-### Spec Writer (foundry-spec)
+### foundry-spec (Spec Writer)
 
 **Mission:** Evaluate top trends and select ONE to build (or reject all)
 
@@ -182,7 +182,7 @@ If you're approaching timeout:
 
 ---
 
-### Builder (foundry-builder)
+### foundry-builder (Builder)
 
 **Mission:** Build MVP from spec using aider, test, push to GitHub
 
@@ -212,7 +212,7 @@ If you're approaching timeout:
 
 ---
 
-### Trend Researcher (trend-researcher)
+### foundry-researcher (Trend Researcher)
 
 **Mission:** Enrich trends with lifecycle data OR generate deep forecasts
 
@@ -236,7 +236,7 @@ If you're approaching timeout:
 
 ---
 
-### Portfolio Curator (portfolio-curator)
+### foundry-curator (Portfolio Curator)
 
 **Mission:** Weekly portfolio review and performance tracking
 
@@ -256,7 +256,7 @@ If you're approaching timeout:
 
 ---
 
-### Consensus Analyst (consensus-analyst)
+### foundry-analyst (Consensus Analyst)
 
 **Mission:** Multi-perspective evaluation of high-engagement builds
 
@@ -277,7 +277,7 @@ If you're approaching timeout:
 
 ---
 
-### Content Drafter (content-drafter)
+### foundry-drafter (Content Drafter)
 
 **Mission:** Generate social media content drafts from build artifacts
 
@@ -402,7 +402,7 @@ Common log locations:
 
 **You communicate via files, not messages.**
 
-The coordinator (Jeeves, main agent) polls for completion:
+The Blacksmith (foundry-blacksmith) polls for completion:
 - Checks for output file existence
 - Reads `state.json` for your status
 - Spawns next agent when you're done

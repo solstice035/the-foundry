@@ -9,10 +9,11 @@
 ## What This Project Is
 
 The Foundry is a multi-agent system that:
-1. Scans trending developer pain points (X, Reddit, HN) at midnight
-2. Selects one buildable trend
-3. Builds an MVP overnight using aider + LLM
-4. Pushes to GitHub and delivers a morning briefing
+1. **The Blacksmith** (foundry-blacksmith) coordinates the overnight pipeline
+2. **Trend Scout** (foundry-scout) scans trending developer pain points (X, Reddit, HN) at midnight
+3. **Spec Writer** (foundry-spec) selects one buildable trend
+4. **Builder** (foundry-builder) builds an MVP overnight using aider + LLM
+5. Pushes to GitHub and delivers a morning briefing at 8am
 
 **Status:** Design complete, awaiting implementation approval  
 **Timeline:** 16 weeks (3 phases, 16 epics)  
@@ -35,7 +36,8 @@ The Foundry is a multi-agent system that:
    - Don't duplicate work
 
 3. **Understand the architecture:**
-   - 3 core agents: Trend Scout (Haiku) → Spec Writer (Sonnet) → Builder (Sonnet + aider)
+   - 1 coordinator: The Blacksmith (foundry-blacksmith, Sonnet) spawns and monitors all agents
+   - 3 core agents: foundry-scout (Haiku) → foundry-spec (Sonnet) → foundry-builder (Sonnet + aider)
    - 3 phases: Core Pipeline → Feedback Loop → Social Amplification
    - 16 epics total, currently all in backlog
 
@@ -226,10 +228,11 @@ Scan the web for trending topics and return a JSON file with the results.
 5. `Independent review.md` — comprehensive review
 
 **Key decisions:**
-- Models: Haiku (Scout), Sonnet (Spec + Builder)
+- Coordinator: The Blacksmith (foundry-blacksmith, Sonnet) - orchestrates entire pipeline
+- Models: Haiku (foundry-scout), Sonnet (foundry-spec + foundry-builder)
 - Sources: HN, Reddit (5 subs), X (3 searches) in Phase 1
 - Builder tool: aider (not pty-based Claude Code)
-- Timing: 00:00 (Scout) → 00:45 (Spec) → 01:30 (Builder) → 08:00 (Briefing)
+- Timing: 00:00 (Blacksmith spawns) → 00:00-00:45 (Scout) → 00:45-01:30 (Spec) → 01:30-07:00 (Builder) → 08:00 (Briefing)
 - Dedup: 14-day window, keyword overlap, Jaccard similarity
 
 **Don't change these without asking Nick.**
