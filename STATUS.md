@@ -1,36 +1,35 @@
 # The Foundry - Current Status
 
-**Last Updated:** 2026-02-18 20:00 GMT  
+**Last Updated:** 2026-02-18 20:02 GMT  
 **Phase:** 1 - Core Build Pipeline  
-**Progress:** 1/16 epics complete (6%)
+**Progress:** 2/16 epics complete (13%)
 
 ---
 
 ## Current Work
 
-**Epic 1.2: Trend Scout - Normalization & Scoring** 🏗️  
-**Started:** 2026-02-18 20:00 GMT  
+**Epic 1.3: Spec Writer - Trend Selection** 🏗️  
+**Started:** 2026-02-18 20:02 GMT  
 **Assignee:** The Blacksmith (foundry-blacksmith)  
 **Model:** Opus 4-6, 10-hour timeout
 
 **Objectives:**
-- Engagement normalization (HN/Reddit → 0-100 scale)
-- Cross-source amplification (1.3x-2.0x boost)
-- Buildability scoring (5 dimensions, explicit rubric)
-- Auto-filters (political/crypto → reject)
-- Two-tier schema (summary for Spec Writer, full for debugging)
-- Cross-source deduplication
-- Output: trends-summary.json (15 trends) + trends-full/ (all)
+- Read trends-summary.json from Epic 1.2
+- Evaluate top 3-5 trends (LLM judgment)
+- Select ONE trend OR reject all with clear reasoning
+- If approved: write detailed spec (features, stack, scope, success criteria)
+- If rejected: document rejection reasons for each top trend
+- Output: spec.json (schema v1) with decision + rationale
 
-**Expected Completion:** ~6-8 hours from start
+**Expected Completion:** ~4-5 hours from start
 
 ---
 
 ## Phase 1 Epics (5 total)
 
 - ✅ **Epic 1.1:** Trend Scout - Data Collection (COMPLETE - 10/11 criteria, X auth deferred)
-- 🏗️ **Epic 1.2:** Trend Scout - Normalization & Scoring (IN PROGRESS)
-- ⏸️ **Epic 1.3:** Spec Writer - Trend Selection (BLOCKED: waiting for 1.2)
+- ✅ **Epic 1.2:** Trend Scout - Normalization & Scoring (COMPLETE - 8/8 criteria)
+- 🏗️ **Epic 1.3:** Spec Writer - Trend Selection (IN PROGRESS)
 - ⏸️ **Epic 1.4:** Builder - Aider Integration (BLOCKED: waiting for 1.3)
 - ⏸️ **Epic 1.5:** Coordination & Morning Briefing (BLOCKED: waiting for 1.4)
 
@@ -42,6 +41,12 @@
 ---
 
 ## Recent Activity
+
+**2026-02-18 20:02 GMT:**
+- 🏗️ Epic 1.3 started (Spec Writer - Trend Selection)
+- ✅ Epic 1.2 complete (8/8 criteria)
+- 📊 Normalized: 114 raw → 95 dedup → 94 filtered → top 15
+- 🎯 Top trend: AsteroidOS 2.0 (score: 7/10)
 
 **2026-02-18 20:00 GMT:**
 - 🏗️ Epic 1.2 started (Normalization & Scoring)
