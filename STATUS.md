@@ -1,27 +1,34 @@
 # The Foundry - Current Status
 
-**Last Updated:** 2026-02-18 20:02 GMT  
+**Last Updated:** 2026-02-18 20:08 GMT  
 **Phase:** 1 - Core Build Pipeline  
-**Progress:** 2/16 epics complete (13%)
+**Progress:** 3/16 epics complete (19%)
 
 ---
 
 ## Current Work
 
-**Epic 1.3: Spec Writer - Trend Selection** 🏗️  
-**Started:** 2026-02-18 20:02 GMT  
+**Epic 1.4: Builder - Aider Integration** 🏗️  
+**Started:** 2026-02-18 20:08 GMT  
 **Assignee:** The Blacksmith (foundry-blacksmith)  
 **Model:** Opus 4-6, 10-hour timeout
 
-**Objectives:**
-- Read trends-summary.json from Epic 1.2
-- Evaluate top 3-5 trends (LLM judgment)
-- Select ONE trend OR reject all with clear reasoning
-- If approved: write detailed spec (features, stack, scope, success criteria)
-- If rejected: document rejection reasons for each top trend
-- Output: spec.json (schema v1) with decision + rationale
+**Project:** pdf-privacy-tools (approved by Spec Writer)
+- Browser-based PDF toolkit (merge, split, reorder, extract text)
+- Stack: TypeScript + Vite + pdf-lib + pdfjs-dist
+- Time estimate: 4-5 hours
 
-**Expected Completion:** ~4-5 hours from start
+**Objectives:**
+- Create project directory (~/projects/foundry/20260218-pdf-privacy-tools/)
+- Spawn aider in batch mode (--yes flag, 5-hour timeout)
+- Monitor build progress (poll every 30 min)
+- Test locally (README exists, dependencies install, basic structure)
+- Create GitHub repo (private, jeevesbot-io/foundry-20260218-pdf-privacy-tools)
+- Push code + README
+- Update history.json with build details
+- Output: build.json with status, repo URL, build log
+
+**Expected Completion:** ~8-10 hours from start
 
 ---
 
@@ -29,8 +36,8 @@
 
 - ✅ **Epic 1.1:** Trend Scout - Data Collection (COMPLETE - 10/11 criteria, X auth deferred)
 - ✅ **Epic 1.2:** Trend Scout - Normalization & Scoring (COMPLETE - 8/8 criteria)
-- 🏗️ **Epic 1.3:** Spec Writer - Trend Selection (IN PROGRESS)
-- ⏸️ **Epic 1.4:** Builder - Aider Integration (BLOCKED: waiting for 1.3)
+- ✅ **Epic 1.3:** Spec Writer - Trend Selection (COMPLETE - 6/6 criteria, APPROVED build)
+- 🏗️ **Epic 1.4:** Builder - Aider Integration (IN PROGRESS - building pdf-privacy-tools)
 - ⏸️ **Epic 1.5:** Coordination & Morning Briefing (BLOCKED: waiting for 1.4)
 
 **Phase 1 Exit Criteria:**
@@ -41,6 +48,12 @@
 ---
 
 ## Recent Activity
+
+**2026-02-18 20:08 GMT:**
+- 🏗️ Epic 1.4 started (Builder - Aider Integration)
+- ✅ Epic 1.3 complete (6/6 criteria)
+- ✅ APPROVED: pdf-privacy-tools (browser PDF toolkit, score: 9/10)
+- 🔨 Stack: TypeScript + Vite + pdf-lib, 4-5 hour build
 
 **2026-02-18 20:02 GMT:**
 - 🏗️ Epic 1.3 started (Spec Writer - Trend Selection)
