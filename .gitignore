@@ -1,0 +1,64 @@
+# The Foundry - Git Ignore
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+env/
+venv/
+*.egg-info/
+dist/
+build/
+
+# Node
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.npm
+.yarn/
+
+# Secrets & Config
+.env
+.env.local
+*.key
+*.pem
+config/secrets.yaml
+config/local.yaml
+
+# Build artifacts
+*.log
+*.tmp
+.cache/
+.temp/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+
+# OpenClaw workspace (tracked separately)
+workspace/
+
+# Agent outputs (runtime data, not code)
+*.json
+!config/**/*.json
+!tests/**/*.json
+
+# Build directories
+out/
+output/
+artifacts/
+
+# Aider
+.aider*
+
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
