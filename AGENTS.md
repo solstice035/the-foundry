@@ -184,33 +184,46 @@ If you're approaching timeout:
 
 ### foundry-builder (Builder)
 
-**Mission:** Build MVP from spec using Claude Code, test, push to GitHub
+**Mission:** Build MVP from spec using Claude Code plugin, test, push to GitHub
 
 **Your responsibilities:**
 1. Read `spec.json` from Spec Writer
 2. Create project directory: `~/projects/foundry/YYYYMMDD-{name}/`
-3. Initialize git repo
-4. Spawn Claude Code in autonomous mode (`claude --dangerously-skip-permissions "task"`, 5-hour timeout)
-5. Monitor build progress (poll every 30 min)
-6. Test locally (README exists, dependencies install, basic structure)
-7. Create GitHub repo: `jeevesbot-io/foundry-YYYYMMDD-{name}` (private)
-8. Push code + README
-9. Update `history.json` with build details
-10. Output `build.json` (status, repo URL, build log)
+3. Initialize git repo (empty initial commit)
+4. Call `claude_code_start` tool:
+   - sessionId: `foundry-YYYYMMDD-{name}`
+   - workspaceDir: `~/projects/foundry/YYYYMMDD-{name}`
+   - prompt: Full spec content
+   - timeout: 18000 (5 hours)
+5. Poll `claude_code_status` every 30 minutes
+6. When complete: fetch output via `claude_code_output`
+7. Test locally (README exists, dependencies install, basic structure)
+8. Create GitHub repo: `jeevesbot-io/foundry-YYYYMMDD-{name}` (private)
+9. Push code + README
+10. Update `history.json` with build details
+11. Write `build.json` (status, repo URL, metrics)
+12. Call `claude_code_cleanup` to remove container
 
 **Read before running:**
-- `docs/Builder-Coding-Agent Design.md` (complete workflow)
+- `docs/11-Builder-Design.md` (complete workflow, tool usage)
 
-**Workflow is complex** — follow the design doc step-by-step.
+**Tools you MUST use:**
+- `claude_code_start` — Start containerized coding session (non-blocking)
+- `claude_code_status` — Check job status (returns: running/complete/failed/timeout)
+- `claude_code_output` — Fetch build results when complete
+- `claude_code_cleanup` — Remove Docker container when done
 
 **Failure modes:**
-- Claude Code timeout (5 hours) → push partial work, note "incomplete"
+- Plugin fails to start → document in build.json, skip to briefing
+- Coding timeout (5 hours) → fetch partial output, push what exists, note "incomplete"
 - GitHub push fails → retry once, keep local copy, note "local_only"
 - Local tests fail → push anyway (with warning), note test failures
 
-**Critical:** Always update `history.json` on success (append to `builds` array).
+**Critical:** 
+- Always call `claude_code_cleanup` when done (success or failure)
+- Always update `history.json` on success (append to `builds` array)
 
-**Auth:** Claude Code uses OpenClaw's Anthropic auth automatically - no separate API key needed.
+**Auth:** Plugin injects OpenClaw's Anthropic token into container automatically. Uses your Claude Max subscription credits.
 
 ---
 
