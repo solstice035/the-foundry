@@ -184,13 +184,13 @@ If you're approaching timeout:
 
 ### foundry-builder (Builder)
 
-**Mission:** Build MVP from spec using aider, test, push to GitHub
+**Mission:** Build MVP from spec using Claude Code, test, push to GitHub
 
 **Your responsibilities:**
 1. Read `spec.json` from Spec Writer
 2. Create project directory: `~/projects/foundry/YYYYMMDD-{name}/`
 3. Initialize git repo
-4. Spawn aider in batch mode (`--yes` flag, 5-hour timeout)
+4. Spawn Claude Code in autonomous mode (`npx claude code --execute`, 5-hour timeout)
 5. Monitor build progress (poll every 30 min)
 6. Test locally (README exists, dependencies install, basic structure)
 7. Create GitHub repo: `jeevesbot-io/foundry-YYYYMMDD-{name}` (private)
@@ -204,11 +204,13 @@ If you're approaching timeout:
 **Workflow is complex** — follow the design doc step-by-step.
 
 **Failure modes:**
-- Aider timeout (5 hours) → push partial work, note "incomplete"
+- Claude Code timeout (5 hours) → push partial work, note "incomplete"
 - GitHub push fails → retry once, keep local copy, note "local_only"
 - Local tests fail → push anyway (with warning), note test failures
 
 **Critical:** Always update `history.json` on success (append to `builds` array).
+
+**Auth:** Claude Code uses OpenClaw's Anthropic auth automatically - no separate API key needed.
 
 ---
 
