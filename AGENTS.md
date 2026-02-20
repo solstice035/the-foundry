@@ -190,7 +190,7 @@ If you're approaching timeout:
 1. Read `spec.json` from Spec Writer
 2. Create project directory: `~/projects/foundry/YYYYMMDD-{name}/`
 3. Initialize git repo
-4. Spawn Claude Code in autonomous mode (`npx claude code --execute`, 5-hour timeout)
+4. Spawn Claude Code in autonomous mode (`claude --dangerously-skip-permissions "task"`, 5-hour timeout)
 5. Monitor build progress (poll every 30 min)
 6. Test locally (README exists, dependencies install, basic structure)
 7. Create GitHub repo: `jeevesbot-io/foundry-YYYYMMDD-{name}` (private)
