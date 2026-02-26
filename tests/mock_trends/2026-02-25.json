@@ -1,0 +1,47 @@
+{
+  "date": "2026-02-25",
+  "scan_timestamp": "2026-02-25T00:15:00Z",
+  "source": "trends-raw.json",
+  "trends": [
+    {
+      "id": "trend-20260225-001",
+      "title": "Privacy-first browser PDF toolkit (no server upload)",
+      "url": "https://reddit.com/r/SideProject/pdf_privacy_tools",
+      "engagement_score": 102,
+      "keywords": ["pdf", "privacy", "browser", "tools", "upload", "toolkit"],
+      "sources": ["reddit", "hn", "x"]
+    },
+    {
+      "id": "trend-20260225-002",
+      "title": "Docker container management CLI with TUI",
+      "url": "https://news.ycombinator.com/item?id=12345",
+      "engagement_score": 78,
+      "keywords": ["cli", "docker", "containers", "tui", "management"],
+      "sources": ["hn"]
+    },
+    {
+      "id": "trend-20260225-003",
+      "title": "Self-hosted RSS with AI summaries",
+      "url": "https://reddit.com/r/selfhosted/ai_rss",
+      "engagement_score": 65,
+      "keywords": ["rss", "reader", "ai", "summaries", "self-hosted"],
+      "sources": ["reddit"]
+    },
+    {
+      "id": "trend-20260225-004",
+      "title": "GitHub Actions local runner (open source)",
+      "url": "https://news.ycombinator.com/item?id=12347",
+      "engagement_score": 185,
+      "keywords": ["github", "actions", "ci", "local", "runner"],
+      "sources": ["hn", "reddit"]
+    },
+    {
+      "id": "trend-20260225-005",
+      "title": "Obsidian plugin for automatic daily journaling",
+      "url": "https://reddit.com/r/ObsidianMD/daily_journal",
+      "engagement_score": 44,
+      "keywords": ["obsidian", "plugin", "journal", "daily", "automatic"],
+      "sources": ["reddit"]
+    }
+  ]
+}

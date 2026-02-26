@@ -1,0 +1,39 @@
+{
+  "date": "2026-02-23",
+  "scan_timestamp": "2026-02-23T00:15:00Z",
+  "source": "trends-raw.json",
+  "trends": [
+    {
+      "id": "trend-20260223-001",
+      "title": "Privacy-first PDF tools running entirely in browser",
+      "url": "https://reddit.com/r/SideProject/pdf_privacy_tools",
+      "engagement_score": 45,
+      "keywords": ["pdf", "privacy", "browser", "tools"],
+      "sources": ["reddit"]
+    },
+    {
+      "id": "trend-20260223-002",
+      "title": "CLI tool for managing Docker containers with TUI",
+      "url": "https://news.ycombinator.com/item?id=12345",
+      "engagement_score": 120,
+      "keywords": ["cli", "docker", "containers", "tui"],
+      "sources": ["hn"]
+    },
+    {
+      "id": "trend-20260223-003",
+      "title": "Self-hosted RSS reader with AI summaries",
+      "url": "https://reddit.com/r/selfhosted/ai_rss",
+      "engagement_score": 67,
+      "keywords": ["rss", "reader", "ai", "summaries", "self-hosted"],
+      "sources": ["reddit"]
+    },
+    {
+      "id": "trend-20260223-004",
+      "title": "Markdown-based note-taking with vim keybindings",
+      "url": "https://news.ycombinator.com/item?id=12346",
+      "engagement_score": 89,
+      "keywords": ["markdown", "notes", "vim", "keybindings"],
+      "sources": ["hn"]
+    }
+  ]
+}

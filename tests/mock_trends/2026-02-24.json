@@ -1,0 +1,47 @@
+{
+  "date": "2026-02-24",
+  "scan_timestamp": "2026-02-24T00:15:00Z",
+  "source": "trends-raw.json",
+  "trends": [
+    {
+      "id": "trend-20260224-001",
+      "title": "Privacy-first PDF tools running in browser (no upload)",
+      "url": "https://reddit.com/r/SideProject/pdf_privacy_tools",
+      "engagement_score": 67,
+      "keywords": ["pdf", "privacy", "browser", "tools", "upload"],
+      "sources": ["reddit", "hn"]
+    },
+    {
+      "id": "trend-20260224-002",
+      "title": "CLI for Docker management with TUI interface",
+      "url": "https://news.ycombinator.com/item?id=12345",
+      "engagement_score": 95,
+      "keywords": ["cli", "docker", "containers", "tui", "management"],
+      "sources": ["hn"]
+    },
+    {
+      "id": "trend-20260224-003",
+      "title": "Self-hosted RSS reader with AI summaries",
+      "url": "https://reddit.com/r/selfhosted/ai_rss",
+      "engagement_score": 72,
+      "keywords": ["rss", "reader", "ai", "summaries", "self-hosted"],
+      "sources": ["reddit"]
+    },
+    {
+      "id": "trend-20260224-004",
+      "title": "Terminal-based pomodoro timer with Notion sync",
+      "url": "https://reddit.com/r/productivity/pomodoro_notion",
+      "engagement_score": 55,
+      "keywords": ["pomodoro", "timer", "terminal", "notion", "sync"],
+      "sources": ["reddit"]
+    },
+    {
+      "id": "trend-20260224-005",
+      "title": "GitHub Actions alternative that runs locally",
+      "url": "https://news.ycombinator.com/item?id=12347",
+      "engagement_score": 140,
+      "keywords": ["github", "actions", "ci", "local"],
+      "sources": ["hn"]
+    }
+  ]
+}

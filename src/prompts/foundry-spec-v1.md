@@ -40,6 +40,14 @@ If `history.json` is missing or empty, skip dedup (no history yet).
 
 For each of the top 5 trends (that aren't duplicates), evaluate against ALL of these criteria:
 
+**NOTE:** Trends now include `lifecycle` data from the Trend Researcher:
+- `status`: new, rising, peaked, stable
+- `trajectory`: emerging, upward, downward, flat
+- `momentum_score`: 0.2-2.0 (already factored into final score)
+- `engagement_history`: past appearances
+
+**Prefer rising trends over peaked trends** when scores are similar.
+
 #### Hard Requirements (must ALL pass)
 - **Buildability score ≥ 7** from Trend Scout
 - **Not political, religious, or controversial**
@@ -53,6 +61,7 @@ For each of the top 5 trends (that aren't duplicates), evaluate against ALL of t
 - **4-6 hour feasibility:** Can a skilled developer with AI assistance build a working prototype?
 - **Demo-ability:** Can someone understand what it does from a README + 30 seconds of use?
 - **Differentiation:** Is this meaningfully different from existing tools? Not just "another X"
+- **Lifecycle timing:** Rising trends (status: "rising") are fresher opportunities than peaked trends (status: "peaked")
 
 ### Step 4: Make Decision
 
@@ -60,7 +69,7 @@ For each of the top 5 trends (that aren't duplicates), evaluate against ALL of t
 - At least one trend passes ALL hard requirements
 - AND scores well on soft evaluation (avg ≥ 3/5 across soft criteria)
 - Select the trend with the highest combined score
-- If two trends are close, prefer: higher engagement > clearer scope > more novel
+- If two trends are close, prefer: **rising status** > higher engagement > clearer scope > more novel
 
 **REJECT ALL** if:
 - No trend passes all hard requirements
@@ -82,7 +91,8 @@ Write output to: `~/.openclaw/workspace/foundry/YYYY-MM-DD/spec.json`
   "date": "YYYY-MM-DD",
   "selected_trend_id": "trend-YYYYMMDD-NNN",
   "selected_trend_title": "Original trend title",
-  "reasoning": "2-3 sentences: why this trend was selected over the others",
+  "lifecycle_status": "new|rising|peaked|stable",
+  "reasoning": "2-3 sentences: why this trend was selected over the others (mention lifecycle if relevant)",
   "rejected_alternatives": [
     {
       "id": "trend-YYYYMMDD-NNN",
@@ -188,3 +198,4 @@ Use these as templates (customize for each trend):
 - "Too similar to [project] built on [date] (keyword overlap: X%)"
 - "No clear user pain point — technically interesting but no obvious user"
 - "Controversial/political topic — outside Foundry guidelines"
+- "Peaked trend (declining engagement over N days) — prefer rising opportunities"

@@ -1,8 +1,8 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
-  "$id": "https://foundry.jeevesbot.io/schemas/trends-summary.v1.json",
+  "$id": "https://foundry.jeevesbot.io/schemas/trends-summary.v2.json",
   "title": "Trends Summary",
-  "description": "Compact trend summary for Spec Writer (output by Trend Scout)",
+  "description": "Compact trend summary for Spec Writer (output by Trend Researcher with lifecycle data)",
   "type": "object",
   "required": [
     "schema_version",
@@ -14,7 +14,7 @@
   "properties": {
     "schema_version": {
       "type": "integer",
-      "const": 1,
+      "const": 2,
       "description": "Schema version for compatibility"
     },
     "scan_date": {
@@ -128,6 +128,64 @@
             "minimum": 1,
             "maximum": 10,
             "description": "Estimated build time in hours"
+          },
+          "lifecycle": {
+            "type": "object",
+            "required": ["status", "trajectory", "first_seen", "appearances"],
+            "properties": {
+              "status": {
+                "type": "string",
+                "enum": ["new", "rising", "peaked", "stable"],
+                "description": "Lifecycle status based on multi-day tracking"
+              },
+              "trajectory": {
+                "type": "string",
+                "enum": ["emerging", "upward", "downward", "flat", "first_seen"],
+                "description": "Engagement trajectory over time"
+              },
+              "first_seen": {
+                "type": "string",
+                "format": "date",
+                "description": "Date this trend was first detected (YYYY-MM-DD)"
+              },
+              "appearances": {
+                "type": "integer",
+                "minimum": 1,
+                "description": "Number of nights this trend has appeared"
+              },
+              "engagement_history": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "required": ["date", "score"],
+                  "properties": {
+                    "date": {
+                      "type": "string",
+                      "format": "date",
+                      "description": "Date of observation (YYYY-MM-DD)"
+                    },
+                    "score": {
+                      "type": "number",
+                      "minimum": 0,
+                      "description": "Engagement score on that date"
+                    }
+                  }
+                },
+                "description": "Historical engagement scores"
+              },
+              "days_active": {
+                "type": "integer",
+                "minimum": 1,
+                "description": "Number of days between first and last appearance"
+              },
+              "momentum_score": {
+                "type": "number",
+                "minimum": 0.2,
+                "maximum": 2.0,
+                "description": "Momentum multiplier (0.2-2.0): boosts rising, penalizes peaked"
+              }
+            },
+            "description": "Lifecycle tracking data from Trend Researcher"
           }
         }
       }

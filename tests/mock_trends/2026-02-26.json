@@ -1,0 +1,47 @@
+{
+  "date": "2026-02-26",
+  "scan_timestamp": "2026-02-26T00:15:00Z",
+  "source": "trends-raw.json",
+  "trends": [
+    {
+      "id": "trend-20260226-001",
+      "title": "Privacy-first PDF toolkit for browsers",
+      "url": "https://reddit.com/r/SideProject/pdf_privacy_tools",
+      "engagement_score": 95,
+      "keywords": ["pdf", "privacy", "browser", "tools", "toolkit"],
+      "sources": ["reddit", "hn"]
+    },
+    {
+      "id": "trend-20260226-002",
+      "title": "Docker TUI management CLI",
+      "url": "https://news.ycombinator.com/item?id=12345",
+      "engagement_score": 62,
+      "keywords": ["cli", "docker", "containers", "tui", "management"],
+      "sources": ["hn"]
+    },
+    {
+      "id": "trend-20260226-003",
+      "title": "GitHub Actions local alternative",
+      "url": "https://news.ycombinator.com/item?id=12347",
+      "engagement_score": 245,
+      "keywords": ["github", "actions", "ci", "local", "runner", "alternative"],
+      "sources": ["hn", "reddit", "x"]
+    },
+    {
+      "id": "trend-20260226-004",
+      "title": "TypeScript ORM with automatic migrations",
+      "url": "https://news.ycombinator.com/item?id=12348",
+      "engagement_score": 112,
+      "keywords": ["typescript", "orm", "migrations", "automatic", "database"],
+      "sources": ["hn"]
+    },
+    {
+      "id": "trend-20260226-005",
+      "title": "Terminal file browser with preview support",
+      "url": "https://reddit.com/r/commandline/file_browser",
+      "engagement_score": 78,
+      "keywords": ["terminal", "file", "browser", "preview", "cli"],
+      "sources": ["reddit"]
+    }
+  ]
+}
