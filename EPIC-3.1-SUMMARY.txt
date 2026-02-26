@@ -1,0 +1,292 @@
+================================================================================
+EPIC 3.1: VOICE GUIDE & MANUAL POSTING PHASE - COMPLETION SUMMARY
+================================================================================
+
+STATUS: ✅ COMPLETE
+COMPLETED: 2026-02-26
+AGENT: foundry-blacksmith (subagent)
+COMMITS: 338e3ac, c52dc38
+
+================================================================================
+DELIVERABLES (5/5)
+================================================================================
+
+1. ✅ voice-guide.md (12.7 KB)
+   - Nick's voice definition
+   - Cross-referenced SOUL.md
+   - Platform-specific rules
+   - 6 content type guidelines
+   - Testing checklist
+
+2. ✅ posting-templates.md (17.6 KB)
+   - 6 content types with examples
+   - X, Reddit, LinkedIn, HN variations
+   - Complete examples in Nick's voice
+   - Timing guidance
+   - Visual suggestions
+
+3. ✅ engagement-tracking.md (11.7 KB)
+   - Performance tracking framework
+   - Quantitative & qualitative metrics
+   - Pattern analysis tables
+   - Baseline targets defined
+
+4. ✅ patterns.md (18.7 KB)
+   - Hypothesis framework
+   - 6 pattern categories
+   - Confidence level system
+   - Validation protocol
+
+5. ✅ README.md (19.5 KB)
+   - Integration guide
+   - Testing workflow
+   - Platform strategy
+   - Next steps roadmap
+
+TOTAL: 80.2 KB, 3,306 lines, committed to git
+
+================================================================================
+ACCEPTANCE CRITERIA (7/7 MET)
+================================================================================
+
+✅ voice-guide.md created (tone, platform rules, examples)
+✅ Cross-references SOUL.md for canonical voice
+✅ Manual posting templates (6 content types)
+✅ Engagement tracking doc created
+✅ Pattern documentation framework established
+✅ Voice guide includes do's and don'ts
+✅ Templates reviewed against SOUL.md for consistency
+
+================================================================================
+KEY ACHIEVEMENTS
+================================================================================
+
+✅ Voice Authenticity: All content cross-referenced with SOUL.md
+✅ Comprehensive Templates: 18 variations across 4 platforms
+✅ Evidence-Based Framework: Pattern validation with confidence levels
+✅ Testing-Ready: Clear workflow for 2-3 week manual phase
+✅ Automation-Ready: Framework designed for Content Drafter integration
+
+================================================================================
+TESTING PHASE READINESS
+================================================================================
+
+READY NOW:
+- Voice guide with concrete examples
+- 6 content type templates (18 platform variations)
+- Tracking framework for all metrics
+- Pattern hypothesis framework
+- Testing workflow documented
+- Baseline targets defined
+- Completion criteria clear
+
+NEEDS FROM NICK:
+1. Review voice guide - Does it capture your voice?
+2. Review templates - Would you post these as-written?
+3. Approve testing approach - 4-6 posts over 2-3 weeks?
+4. Choose first post - Which content type to test first?
+
+RECOMMENDED FIRST POSTS:
+1. Build announcement (if recent strong build exists)
+2. Process thread (always relevant meta-content)
+3. Rejection post (if Spec Writer recently rejected)
+4. Trend forecast (low-risk thought leadership)
+
+================================================================================
+MANUAL TESTING WORKFLOW
+================================================================================
+
+PER POST (25-30 min):
+1. Choose build/topic from pipeline output
+2. Select content type from templates
+3. Draft using voice-guide.md
+4. Self-review against checklist
+5. Post on X (primary) + Reddit (if strong)
+6. Log in engagement-tracking.md
+7. Respond to comments (Reddit 2-hour rule)
+8. Update metrics at 24h and 7d
+9. Document learnings in patterns.md
+
+WEEKLY REVIEW (30 min):
+1. Calculate averages by type/platform/timing
+2. Identify top performer and why
+3. Identify underperformer and why
+4. Validate patterns (hypothesis → confirmed)
+5. Update voice-guide.md with learned language
+6. Adjust templates if needed
+
+COMPLETION (after 2-3 weeks):
+- 4-6 posts published
+- Each content type tested ≥1x
+- 3+ high-confidence patterns identified
+- 3+ anti-patterns documented
+- Voice guide refined with real examples
+- >60% would be "approved as-is" in hindsight
+
+================================================================================
+NEXT STEPS
+================================================================================
+
+IMMEDIATE (Nick's Review):
+1. Read social/voice-guide.md
+2. Read social/templates/posting-templates.md
+3. Skim social/README.md
+4. Provide feedback or approve testing
+
+TESTING PHASE (2-3 weeks):
+Week 1: 2 posts (build + process thread)
+Week 2: 2 posts (rejection + forecast OR more builds)
+Week 3: 1-2 posts (consensus + failure OR more builds)
+
+EPIC 3.2 PREP (After Testing):
+1. Register Content Drafter agent
+2. Create content-queue.json schema
+3. Write Content Drafter prompts
+4. Integrate with morning briefing
+5. Build Telegram approval flow
+6. Test with existing builds
+7. Iterate to >60% approval rate
+
+================================================================================
+SUCCESS METRICS
+================================================================================
+
+EPIC 3.1 (Manual Testing):
+- 4-6 posts published
+- Each content type tested
+- Avg engagement: >2% (X), >70% upvote ratio (Reddit)
+- At least one post >50 likes/upvotes
+- Voice guide feels accurate
+- Patterns identified with evidence
+
+EPIC 3.2 (Content Drafter):
+- >60% approval rate initially
+- >70% after 1 month
+- <60 seconds to approve
+- Drafts feel like Nick's voice
+
+EPIC 3.3 (Voice Learning):
+- Edit frequency decreases 40% over 3 months
+- >80% approval rate
+- Engagement stable/improving
+
+LONG-TERM (6 months):
+- 1+ post/week getting 100+ likes
+- Reddit posts >100 upvotes
+- HN front page at least once
+- <15 min/day on social (review + approve + replies)
+
+================================================================================
+PLATFORM STRATEGY
+================================================================================
+
+PRIMARY: X/Twitter
+- 3-4 posts/week max, never >1/day
+- Best times: 09:00-11:00, 15:00-17:00 GMT
+- All 6 content types work
+
+SECONDARY: Reddit
+- 1-2 posts/month max
+- Best times: 14:00-16:00 GMT (US morning)
+- Strong builds only, detailed posts
+- 2-hour engagement rule
+
+TERTIARY: Hacker News
+- 1 post/month max
+- Signal score 15+ only
+- Working demo required
+
+SUPPLEMENTARY: LinkedIn
+- 1-2 posts/month
+- Portfolio summaries, quarterly deep-dives
+- Tue-Thu mornings 08:00-10:00 GMT
+
+================================================================================
+CONTENT TYPES & EXAMPLES
+================================================================================
+
+1. BUILD ANNOUNCEMENT (successful build)
+   "Saw devs complaining about X. Built a thing while I slept."
+
+2. PROCESS THREAD (weekly meta)
+   "I built a system that watches dev Twitter overnight and builds apps..."
+
+3. REJECTION POST (no builds)
+   "My AI pipeline analyzed 14 trends last night. Built zero. Here's why."
+
+4. TREND FORECAST (emerging pain point)
+   "Pain point I'm tracking: API key management across providers."
+
+5. CONSENSUS TAKE (multi-perspective)
+   "Ran 5-perspective analysis: User, Critic, Builder, Marketer, Investor."
+
+6. FAILURE POST (build failed)
+   "Hit WebSocket wall at 60%. Lesson: scope to single-user first."
+
+================================================================================
+VOICE PRINCIPLES (from SOUL.md)
+================================================================================
+
+✅ Be genuinely helpful, not performatively helpful
+   Applied: No "Excited to announce!" — just announce
+
+✅ Have opinions
+   Applied: "Sometimes the best build is no build"
+
+✅ Be resourceful before asking
+   Applied: Show solutions, not just problems
+
+✅ Earn trust through competence
+   Applied: Let work demonstrate capability
+
+✅ Never send half-baked replies
+   Applied: Approval gate is non-negotiable
+
+✅ You're not the user's voice
+   Applied: Content Drafter suggests, Nick approves
+
+================================================================================
+FILE LOCATIONS
+================================================================================
+
+All deliverables in: ~/projects/the-foundry/social/
+
+voice-guide.md           - Voice definition (read first)
+templates/posting-templates.md - 6 content types with examples
+engagement-tracking.md   - Performance tracking
+patterns.md             - What works/doesn't
+README.md               - Integration guide
+
+Completion report: ~/projects/the-foundry/EPIC-3.1-COMPLETION-REPORT.md
+
+================================================================================
+GIT STATUS
+================================================================================
+
+Branch: main
+Commits: 2 new commits
+  c52dc38 - Epic 3.1: Add completion report
+  338e3ac - Epic 3.1: Voice Guide & Manual Posting Phase - Complete
+
+Files added: 6 (5 in social/, 1 completion report)
+Lines added: 3,452
+
+All changes committed to git.
+
+================================================================================
+CONCLUSION
+================================================================================
+
+Epic 3.1 is complete and ready for manual testing. All required deliverables
+created, voice cross-referenced with SOUL.md, templates provided in Nick's
+authentic voice, and tracking infrastructure ready to identify patterns.
+
+The framework balances structure (templates, guidelines) with flexibility
+(living documents, pattern learning). It prioritizes authenticity over speed
+by requiring manual validation before automation.
+
+Next step: Nick reviews deliverables and approves testing phase.
+
+================================================================================
+STATUS: ✅ READY FOR TESTING
+================================================================================
