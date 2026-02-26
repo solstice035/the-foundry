@@ -1,0 +1,102 @@
+# Cron job configuration for GitHub Engagement Monitoring
+# Epic 2.6: Daily engagement check at 12:00
+
+# This configuration should be added to OpenClaw gateway config
+# Location: Gateway admin UI or config file
+
+# Daily Engagement Check (12:00)
+engagement_check:
+  name: "The Foundry - GitHub Engagement Check"
+  schedule:
+    kind: cron
+    expr: "0 12 * * *"  # Daily at 12:00 (noon)
+    tz: Europe/London
+  payload:
+    kind: systemEvent
+    text: |
+      Run GitHub engagement monitoring for The Foundry.
+      
+      Execute: python3 ~/projects/the-foundry/src/scripts/check_engagement.py
+      
+      This will:
+      1. Fetch stars, forks, issues for all public foundry-* repos
+      2. Compare to previous day (growth detection)
+      3. Check thresholds (25 stars, 50 stars, 2+ external issues)
+      4. Generate action items
+      5. Flag repos eligible for Consensus Analyst (25+ stars + 3 days old)
+      6. Save to ~/.openclaw/workspace/foundry/YYYY-MM-DD/engagement.json
+      
+      If any repos meet Consensus Analyst criteria, trigger review:
+      - Check engagement.json summary.repos_needing_consensus
+      - For each repo, spawn consensus-analyst sub-agent
+  sessionTarget: main
+  enabled: true
+
+# Integration with Morning Briefing (08:00)
+# Add this to the existing morning briefing cron job:
+morning_briefing_update:
+  name: "The Foundry - Morning Briefing (with Engagement)"
+  schedule:
+    kind: cron
+    expr: "0 8 * * *"  # Daily at 8am
+    tz: Europe/London
+  payload:
+    kind: systemEvent
+    text: |
+      Compile and send Foundry morning briefing.
+      
+      Read from yesterday's directory:
+      - trends-summary.json (Trend Scout output)
+      - spec.json (Spec Writer output)
+      - build.json (Builder output, if approved)
+      - engagement.json (Engagement check from 12:00 previous day)
+      
+      Include engagement summary in briefing using:
+        from src.utils_engagement import format_engagement_summary, add_engagement_to_briefing
+        
+      If engagement.json exists:
+        - Add engagement section to briefing
+        - Highlight high-priority action items
+        - Note repos ready for Consensus Analyst
+  sessionTarget: main
+  enabled: true
+
+# Consensus Analyst Trigger (automatic)
+# This should be checked after engagement monitoring completes
+consensus_analyst_trigger:
+  description: |
+    Automatically triggered when repos meet consensus criteria.
+    
+    Criteria:
+    - 25+ stars
+    - 3+ days old
+    - Not previously analyzed (check analysis/ directory)
+    
+    When triggered:
+    1. Spawn consensus-analyst sub-agent for the repo
+    2. Pass repo name, stats, growth data
+    3. Agent performs multi-perspective evaluation
+    4. Output: analysis/YYYYMMDD-{project}-consensus.json
+    
+    Integration:
+    - Add check in engagement script or post-engagement cron
+    - Read engagement.json summary.repos_needing_consensus
+    - For each repo not in analysis/:
+        sessions_spawn(
+          agent-id: "consensus-analyst",
+          task: "Evaluate {repo} from multi-perspective..."
+        )
+  
+# Implementation Example:
+# 
+# In OpenClaw main session after engagement check:
+# 
+# engagement = load_json("~/.openclaw/workspace/foundry/2026-02-26/engagement.json")
+# for repo in engagement["summary"]["repos_needing_consensus"]:
+#     analysis_path = f"~/.openclaw/workspace/foundry/analysis/{repo}-consensus.json"
+#     if not exists(analysis_path):
+#         # Trigger Consensus Analyst
+#         spawn_subagent(
+#             agent="consensus-analyst",
+#             task=f"Evaluate {repo} from 5 perspectives. See docs/Post Build Review.md"
+#         )
