@@ -1,0 +1,338 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://foundry.jeevesbot.io/schemas/consensus.schema.json",
+  "title": "Consensus Analysis",
+  "description": "Multi-perspective evaluation of a build for investment decisions",
+  "type": "object",
+  "required": [
+    "project",
+    "date_built",
+    "date_analyzed",
+    "trigger",
+    "current_metrics",
+    "perspectives",
+    "consensus",
+    "meta"
+  ],
+  "properties": {
+    "project": {
+      "type": "string",
+      "description": "Project name (e.g., 'commitai')"
+    },
+    "date_built": {
+      "type": "string",
+      "format": "date",
+      "description": "Date the build was completed (YYYY-MM-DD)"
+    },
+    "date_analyzed": {
+      "type": "string",
+      "format": "date",
+      "description": "Date this analysis was performed (YYYY-MM-DD)"
+    },
+    "trigger": {
+      "type": "string",
+      "enum": [
+        "crossed_25_stars",
+        "crossed_50_stars",
+        "crossed_100_stars",
+        "external_issues",
+        "manual_analysis"
+      ],
+      "description": "What triggered this analysis"
+    },
+    "current_metrics": {
+      "type": "object",
+      "required": ["stars", "forks", "issues", "days_since_build"],
+      "properties": {
+        "stars": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "forks": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "issues": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "days_since_build": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "trend_source": {
+          "type": "string",
+          "enum": ["reddit", "hn", "x", "producthunt", "github", "manual"]
+        },
+        "build_cost_usd": {
+          "type": "number",
+          "minimum": 0
+        }
+      }
+    },
+    "perspectives": {
+      "type": "array",
+      "minItems": 5,
+      "maxItems": 5,
+      "items": {
+        "type": "object",
+        "required": ["role", "vote", "reasoning"],
+        "properties": {
+          "role": {
+            "type": "string",
+            "enum": ["user", "critic", "builder", "marketer", "investor"]
+          },
+          "vote": {
+            "type": "string",
+            "enum": ["invest", "hold", "pass"]
+          },
+          "reasoning": {
+            "type": "string",
+            "minLength": 50,
+            "description": "Detailed reasoning for the vote"
+          },
+          "key_requests": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "User perspective: feature requests"
+          },
+          "adoption_blockers": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "User perspective: what prevents adoption"
+          },
+          "concerns": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "Critic perspective: specific concerns"
+          },
+          "competitive_threats": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "Critic perspective: competing solutions"
+          },
+          "fatal_flaws": {
+            "type": "string",
+            "description": "Critic perspective: deal-breaking issues"
+          },
+          "technical_debt": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "Builder perspective: code quality issues"
+          },
+          "effort_estimate": {
+            "type": "string",
+            "description": "Builder perspective: hours to production quality"
+          },
+          "architecture_assessment": {
+            "type": "string",
+            "description": "Builder perspective: code quality summary"
+          },
+          "extensibility": {
+            "type": "string",
+            "description": "Builder perspective: ease of adding features"
+          },
+          "distribution_channels": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "Marketer perspective: where to promote"
+          },
+          "narrative": {
+            "type": "string",
+            "description": "Marketer perspective: core story"
+          },
+          "virality_potential": {
+            "type": "string",
+            "description": "Marketer perspective: shareability assessment"
+          },
+          "timing": {
+            "type": "string",
+            "description": "Marketer perspective: market timing assessment"
+          },
+          "differentiation_angle": {
+            "type": "string",
+            "description": "Marketer perspective: unique selling point"
+          },
+          "classification": {
+            "type": "string",
+            "enum": ["feature", "product", "business"],
+            "description": "Investor perspective: what type of thing is this"
+          },
+          "moat": {
+            "type": "string",
+            "description": "Investor perspective: defensibility assessment"
+          },
+          "monetization_path": {
+            "type": "string",
+            "description": "Investor perspective: revenue potential"
+          },
+          "growth_trajectory": {
+            "type": "string",
+            "description": "Investor perspective: scaling potential"
+          },
+          "opportunity_cost": {
+            "type": "string",
+            "description": "Investor perspective: what else could be built"
+          },
+          "exit_criteria": {
+            "type": "string",
+            "description": "Investor perspective: when to stop investing"
+          },
+          "recommendation": {
+            "type": "string",
+            "description": "Investor perspective: strategic recommendation"
+          }
+        }
+      }
+    },
+    "consensus": {
+      "type": "object",
+      "required": [
+        "votes",
+        "recommendation",
+        "summary",
+        "rationale",
+        "action_items",
+        "do_not"
+      ],
+      "properties": {
+        "votes": {
+          "type": "object",
+          "required": ["invest", "hold", "pass"],
+          "properties": {
+            "invest": {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 5
+            },
+            "hold": {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 5
+            },
+            "pass": {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 5
+            }
+          }
+        },
+        "recommendation": {
+          "type": "string",
+          "enum": ["invest", "invest_limited", "hold", "pass"]
+        },
+        "effort_cap_hours": {
+          "type": "number",
+          "minimum": 0,
+          "description": "Maximum hours to invest (for invest_limited)"
+        },
+        "summary": {
+          "type": "string",
+          "minLength": 50,
+          "description": "One-paragraph synthesis"
+        },
+        "rationale": {
+          "type": "string",
+          "minLength": 50,
+          "description": "Why this recommendation, how conflicts resolved"
+        },
+        "action_items": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "string",
+            "description": "Specific, time-bounded action (e.g., 'Add tests — 3 hours')"
+          }
+        },
+        "total_estimated_effort": {
+          "type": "string",
+          "description": "Sum of action item hours"
+        },
+        "do_not": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "string",
+            "description": "Anti-actions to prevent scope creep"
+          }
+        },
+        "success_criteria": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "description": "Measurable completion criteria"
+          }
+        }
+      }
+    },
+    "meta": {
+      "type": "object",
+      "required": [
+        "perspectives_disagreed",
+        "critic_vote",
+        "investor_vote",
+        "genuine_conflict",
+        "rubber_stamping_detected"
+      ],
+      "properties": {
+        "perspectives_disagreed": {
+          "type": "boolean",
+          "description": "Did at least one perspective disagree with majority"
+        },
+        "critic_vote": {
+          "type": "string",
+          "enum": ["invest", "hold", "pass"]
+        },
+        "investor_vote": {
+          "type": "string",
+          "enum": ["invest", "hold", "pass"]
+        },
+        "genuine_conflict": {
+          "type": "boolean",
+          "description": "Was there substantive disagreement (not surface-level)"
+        },
+        "rubber_stamping_detected": {
+          "type": "boolean",
+          "description": "Did all perspectives agree without critical analysis"
+        },
+        "unanimous_invest": {
+          "type": "boolean",
+          "description": "All 5 perspectives voted invest (rare, flag for review)"
+        },
+        "review_note": {
+          "type": "string",
+          "description": "Notes for quality review"
+        },
+        "engagement_alert": {
+          "type": "string",
+          "description": "Special engagement milestones (e.g., 100+ stars)"
+        },
+        "priority": {
+          "type": "string",
+          "enum": ["low", "medium", "high"],
+          "description": "Urgency level"
+        },
+        "archive_immediately": {
+          "type": "boolean",
+          "description": "Unanimous pass — archive without further review"
+        }
+      }
+    },
+    "engagement_note": {
+      "type": "string",
+      "description": "For manual analysis below standard threshold"
+    }
+  }
+}
