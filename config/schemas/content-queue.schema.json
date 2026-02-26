@@ -1,0 +1,455 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://jeevesbot.io/schemas/foundry/content-queue.json",
+  "title": "Content Queue Schema",
+  "description": "Social media content drafts pending review, approval, rejection, or posting",
+  "type": "object",
+  "required": ["schema_version", "last_updated", "pending"],
+  "properties": {
+    "schema_version": {
+      "type": "integer",
+      "const": 1,
+      "description": "Schema version for compatibility"
+    },
+    "last_updated": {
+      "type": "string",
+      "format": "date-time",
+      "description": "ISO 8601 timestamp of last queue update"
+    },
+    "pending": {
+      "type": "array",
+      "description": "Drafts awaiting Nick's review",
+      "items": {
+        "$ref": "#/definitions/draft"
+      }
+    },
+    "approved": {
+      "type": "array",
+      "description": "Drafts approved by Nick, ready to post",
+      "items": {
+        "$ref": "#/definitions/draft"
+      },
+      "default": []
+    },
+    "rejected": {
+      "type": "array",
+      "description": "Drafts rejected by Nick with reasons",
+      "items": {
+        "$ref": "#/definitions/rejectedDraft"
+      },
+      "default": []
+    },
+    "posted": {
+      "type": "array",
+      "description": "Archive of posted content with performance data",
+      "items": {
+        "$ref": "#/definitions/postedDraft"
+      },
+      "default": []
+    }
+  },
+  "definitions": {
+    "draft": {
+      "type": "object",
+      "required": ["id", "created", "content_type", "priority", "platforms", "status"],
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^draft-\\d{8}-\\d{3}$",
+          "description": "Unique draft ID (draft-YYYYMMDD-NNN)"
+        },
+        "created": {
+          "type": "string",
+          "format": "date-time",
+          "description": "ISO 8601 timestamp of draft creation"
+        },
+        "source_build": {
+          "type": "string",
+          "pattern": "^\\d{4}-\\d{2}-\\d{2}$",
+          "description": "Date of source build (YYYY-MM-DD) or null for non-build content"
+        },
+        "content_type": {
+          "type": "string",
+          "enum": [
+            "build_announcement",
+            "process_thread",
+            "rejection_post",
+            "trend_forecast",
+            "consensus_take",
+            "failure_post"
+          ],
+          "description": "Type of content (one of 6 templates)"
+        },
+        "priority": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 3,
+          "description": "Priority level (1=post today, 2=this week, 3=optional)"
+        },
+        "estimated_engagement": {
+          "type": "string",
+          "enum": ["high", "medium-high", "medium", "low"],
+          "description": "Gut-check engagement estimate"
+        },
+        "platforms": {
+          "type": "object",
+          "description": "Platform-specific drafts (at least one required)",
+          "minProperties": 1,
+          "properties": {
+            "x": {
+              "$ref": "#/definitions/xDraft"
+            },
+            "reddit": {
+              "$ref": "#/definitions/redditDraft"
+            },
+            "linkedin": {
+              "$ref": "#/definitions/linkedinDraft"
+            },
+            "hackernews": {
+              "$ref": "#/definitions/hackerNewsDraft"
+            }
+          }
+        },
+        "notes": {
+          "type": "string",
+          "description": "Internal notes about this draft (why created, context, etc.)"
+        },
+        "status": {
+          "type": "string",
+          "enum": ["pending_review", "approved", "posted", "rejected"],
+          "description": "Current status in workflow"
+        }
+      }
+    },
+    "xDraft": {
+      "type": "object",
+      "required": ["format", "tweets", "estimated_engagement", "best_posting_time"],
+      "properties": {
+        "format": {
+          "type": "string",
+          "enum": ["single", "thread"],
+          "description": "Single tweet or thread"
+        },
+        "tweets": {
+          "type": "array",
+          "description": "Array of tweet texts (in order for threads)",
+          "items": {
+            "type": "string",
+            "maxLength": 280
+          },
+          "minItems": 1,
+          "maxItems": 10
+        },
+        "visual": {
+          "$ref": "#/definitions/visual"
+        },
+        "estimated_engagement": {
+          "type": "string",
+          "enum": ["high", "medium-high", "medium", "low"]
+        },
+        "best_posting_time": {
+          "type": "string",
+          "description": "Recommended posting window (e.g., '09:00-10:00 GMT (dev morning scroll)')"
+        }
+      }
+    },
+    "redditDraft": {
+      "type": "object",
+      "required": ["subreddit", "title", "body", "estimated_engagement", "best_posting_time"],
+      "properties": {
+        "subreddit": {
+          "type": "string",
+          "pattern": "^r/[a-zA-Z0-9_]+$",
+          "description": "Target subreddit (e.g., r/SideProject)"
+        },
+        "title": {
+          "type": "string",
+          "maxLength": 300,
+          "description": "Post title"
+        },
+        "body": {
+          "type": "string",
+          "description": "Post body (Markdown formatted)"
+        },
+        "visual": {
+          "$ref": "#/definitions/visual"
+        },
+        "estimated_engagement": {
+          "type": "string",
+          "enum": ["high", "medium-high", "medium", "low"]
+        },
+        "best_posting_time": {
+          "type": "string",
+          "description": "Recommended posting window"
+        },
+        "requires_availability": {
+          "type": "string",
+          "description": "Time commitment needed (e.g., '2 hours for replies')"
+        }
+      }
+    },
+    "linkedinDraft": {
+      "type": "object",
+      "required": ["body", "estimated_engagement", "best_posting_time"],
+      "properties": {
+        "body": {
+          "type": "string",
+          "description": "Post body (plain text or light formatting)"
+        },
+        "visual": {
+          "$ref": "#/definitions/visual"
+        },
+        "estimated_engagement": {
+          "type": "string",
+          "enum": ["high", "medium-high", "medium", "low"]
+        },
+        "best_posting_time": {
+          "type": "string",
+          "description": "Recommended posting window"
+        }
+      }
+    },
+    "hackerNewsDraft": {
+      "type": "object",
+      "required": ["title", "url", "estimated_engagement"],
+      "properties": {
+        "title": {
+          "type": "string",
+          "maxLength": 80,
+          "description": "HN post title (Show HN: ...)"
+        },
+        "url": {
+          "type": "string",
+          "format": "uri",
+          "description": "Link to repo or demo"
+        },
+        "text": {
+          "type": "string",
+          "description": "Optional text body (for Ask HN / Tell HN)"
+        },
+        "estimated_engagement": {
+          "type": "string",
+          "enum": ["high", "medium-high", "medium", "low"]
+        },
+        "requires_approval": {
+          "type": "boolean",
+          "const": true,
+          "description": "HN always requires explicit approval"
+        }
+      }
+    },
+    "visual": {
+      "type": "object",
+      "description": "Visual content (screenshot, GIF, stat card)",
+      "required": ["type", "path", "alt_text"],
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": ["terminal_gif", "screenshot", "stat_card"],
+          "description": "Type of visual asset"
+        },
+        "path": {
+          "type": "string",
+          "description": "Path to visual file (relative to workspace)"
+        },
+        "alt_text": {
+          "type": "string",
+          "description": "Accessibility alt text"
+        },
+        "placement": {
+          "type": "integer",
+          "description": "For X threads: which tweet number gets the visual (1-indexed)"
+        }
+      }
+    },
+    "rejectedDraft": {
+      "allOf": [
+        {
+          "$ref": "#/definitions/draft"
+        },
+        {
+          "type": "object",
+          "required": ["rejected_at", "rejection_reason"],
+          "properties": {
+            "rejected_at": {
+              "type": "string",
+              "format": "date-time",
+              "description": "When Nick rejected this draft"
+            },
+            "rejection_reason": {
+              "type": "string",
+              "description": "Why Nick rejected (for voice learning)"
+            }
+          }
+        }
+      ]
+    },
+    "postedDraft": {
+      "allOf": [
+        {
+          "$ref": "#/definitions/draft"
+        },
+        {
+          "type": "object",
+          "required": ["posted_at", "posted_to"],
+          "properties": {
+            "posted_at": {
+              "type": "string",
+              "format": "date-time",
+              "description": "When content was posted"
+            },
+            "posted_to": {
+              "type": "array",
+              "description": "Which platforms it was posted to",
+              "items": {
+                "type": "string",
+                "enum": ["x", "reddit", "linkedin", "hackernews"]
+              },
+              "minItems": 1
+            },
+            "edits_before_posting": {
+              "type": "array",
+              "description": "Nick's edits before posting (for voice learning)",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "platform": {
+                    "type": "string"
+                  },
+                  "original": {
+                    "type": "string"
+                  },
+                  "final": {
+                    "type": "string"
+                  },
+                  "edit_note": {
+                    "type": "string"
+                  }
+                }
+              }
+            },
+            "performance": {
+              "type": "object",
+              "description": "Engagement metrics after posting",
+              "properties": {
+                "x": {
+                  "$ref": "#/definitions/xPerformance"
+                },
+                "reddit": {
+                  "$ref": "#/definitions/redditPerformance"
+                },
+                "linkedin": {
+                  "$ref": "#/definitions/linkedinPerformance"
+                },
+                "hackernews": {
+                  "$ref": "#/definitions/hnPerformance"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "xPerformance": {
+      "type": "object",
+      "properties": {
+        "impressions": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "likes": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "retweets": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "replies": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "profile_visits": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "measured_at": {
+          "type": "string",
+          "format": "date-time"
+        }
+      }
+    },
+    "redditPerformance": {
+      "type": "object",
+      "properties": {
+        "upvotes": {
+          "type": "integer"
+        },
+        "upvote_ratio": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1
+        },
+        "comments": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "awards": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "measured_at": {
+          "type": "string",
+          "format": "date-time"
+        }
+      }
+    },
+    "linkedinPerformance": {
+      "type": "object",
+      "properties": {
+        "impressions": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "reactions": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "comments": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "shares": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "measured_at": {
+          "type": "string",
+          "format": "date-time"
+        }
+      }
+    },
+    "hnPerformance": {
+      "type": "object",
+      "properties": {
+        "points": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "comments": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "rank": {
+          "type": "integer",
+          "minimum": 1,
+          "description": "Highest rank achieved on front page"
+        },
+        "measured_at": {
+          "type": "string",
+          "format": "date-time"
+        }
+      }
+    }
+  }
+}

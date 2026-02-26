@@ -1,0 +1,116 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://foundry.jeevesbot.io/schemas/metrics.v1.json",
+  "title": "Nightly Metrics Log",
+  "description": "Append-only log of nightly pipeline performance (JSONL format)",
+  "type": "object",
+  "required": ["date", "type", "scout_duration_s", "spec_duration_s", "build_duration_s", "total_duration_s", "cost_usd"],
+  "properties": {
+    "date": {
+      "type": "string",
+      "format": "date",
+      "description": "Night date (YYYY-MM-DD)"
+    },
+    "type": {
+      "type": "string",
+      "enum": ["success", "rejected", "failure", "partial"],
+      "description": "Overall pipeline outcome"
+    },
+    "scout_duration_s": {
+      "type": "number",
+      "minimum": 0,
+      "description": "Trend Scout duration in seconds"
+    },
+    "scout_trends_found": {
+      "type": "integer",
+      "minimum": 0,
+      "description": "Number of trends discovered"
+    },
+    "scout_sources_succeeded": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "Sources that successfully returned data"
+    },
+    "scout_sources_failed": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "Sources that failed or timed out"
+    },
+    "spec_duration_s": {
+      "type": "number",
+      "minimum": 0,
+      "description": "Spec Writer duration in seconds"
+    },
+    "spec_decision": {
+      "type": ["string", "null"],
+      "enum": ["approved", "rejected", null],
+      "description": "Spec Writer decision"
+    },
+    "spec_rejection_reason": {
+      "type": ["string", "null"],
+      "description": "Why trends were rejected (if applicable)"
+    },
+    "build_duration_s": {
+      "type": "number",
+      "minimum": 0,
+      "description": "Builder duration in seconds (0 if not started)"
+    },
+    "build_status": {
+      "type": ["string", "null"],
+      "enum": ["success", "partial", "failed", "timeout", null],
+      "description": "Builder outcome (null if not started)"
+    },
+    "total_duration_s": {
+      "type": "number",
+      "minimum": 0,
+      "description": "Total pipeline duration (midnight to briefing)"
+    },
+    "project": {
+      "type": ["string", "null"],
+      "description": "Project name (if build succeeded)"
+    },
+    "repo_url": {
+      "type": ["string", "null"],
+      "format": "uri",
+      "description": "GitHub repo URL (if created)"
+    },
+    "category": {
+      "type": ["string", "null"],
+      "description": "Project category (cli, web, api, etc.)"
+    },
+    "source": {
+      "type": ["string", "null"],
+      "description": "Winning trend source (hn, reddit, x)"
+    },
+    "engagement_score": {
+      "type": ["number", "null"],
+      "minimum": 0,
+      "maximum": 100,
+      "description": "Normalized engagement score of selected trend"
+    },
+    "buildability_score": {
+      "type": ["number", "null"],
+      "minimum": 0,
+      "maximum": 10,
+      "description": "Buildability score of selected trend"
+    },
+    "cost_usd": {
+      "type": "number",
+      "minimum": 0,
+      "description": "Estimated cost in USD (LLM + infra)"
+    },
+    "tokens_used": {
+      "type": ["integer", "null"],
+      "minimum": 0,
+      "description": "Total tokens consumed (if available)"
+    },
+    "notes": {
+      "type": ["string", "null"],
+      "description": "Additional notes or error messages"
+    }
+  }
+}
