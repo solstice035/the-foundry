@@ -2,8 +2,8 @@
 #
 # cleanup_history.sh - Weekly cleanup of old history entries
 #
-# Removes builds and rejections older than 30 days from history.json.
-# The active deduplication window is 14 days, but we keep 30 days of history
+# Removes builds and rejections older than 90 days from history.json.
+# The active deduplication window is 30 days, but we keep 90 days of history
 # for metrics and portfolio analysis.
 #
 # Usage: ./cleanup_history.sh
@@ -37,7 +37,7 @@ from src.dedup import cleanup_history
 history_path = '$HISTORY_PATH'
 
 try:
-    stats = cleanup_history(history_path, archive_days=30)
+    stats = cleanup_history(history_path, archive_days=90)
     print(f"  ✓ Removed {stats['builds_removed']} old builds")
     print(f"  ✓ Removed {stats['rejections_removed']} old rejections")
     

@@ -102,7 +102,7 @@ with open('~/.openclaw/workspace/foundry/history.json') as f:
 
 # Check each trend
 for trend in trends_data['trends']:
-    dup = is_duplicate(trend['title'], history, threshold=0.5, window_days=14)
+    dup = is_duplicate(trend['title'], history, threshold=0.5, window_days=30)
     if dup:
         trend['previously_built'] = True
         trend['duplicate_info'] = {
@@ -125,7 +125,7 @@ EOF
 
 **Algorithm:** Jaccard similarity on keywords
 - **Threshold:** 50% keyword overlap
-- **Window:** 14 days (configurable in history.json)
+- **Window:** 30 days (configurable in history.json)
 - **Compares against:** Both builds AND rejections
 
 **Example:**

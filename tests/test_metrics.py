@@ -40,7 +40,7 @@ def load_metrics() -> List[Dict[str, Any]]:
 def load_history() -> Dict[str, Any]:
     """Load build history"""
     if not HISTORY_FILE.exists():
-        return {"builds": [], "rejections": [], "dedup_window_days": 14}
+        return {"builds": [], "rejections": [], "dedup_window_days": 30}
     
     with open(HISTORY_FILE, 'r') as f:
         return json.load(f)

@@ -168,7 +168,7 @@ class TestDuplicateDetection(unittest.TestCase):
                     'reason': 'Political content'
                 }
             ],
-            'dedup_window_days': 14
+            'dedup_window_days': 30
         }
     
     def test_exact_duplicate(self):
@@ -201,7 +201,7 @@ class TestDuplicateDetection(unittest.TestCase):
     def test_old_build_outside_window(self):
         """Builds older than the dedup window should be ignored."""
         # Add an old build
-        old_date = (datetime.now() - timedelta(days=20)).strftime('%Y-%m-%d')
+        old_date = (datetime.now() - timedelta(days=35)).strftime('%Y-%m-%d')
         self.history['builds'].append({
             'date': old_date,
             'project_name': 'old-kubernetes-tool',
@@ -209,9 +209,25 @@ class TestDuplicateDetection(unittest.TestCase):
             'keywords': ['kubernet', 'clust', 'tool']
         })
         
-        # This should NOT be flagged as duplicate (outside 14-day window)
+        # This should NOT be flagged as duplicate (outside 30-day window)
         result = is_duplicate('Kubernetes cluster monitoring', self.history)
         self.assertIsNone(result)
+    
+    def test_build_inside_30_day_window(self):
+        """Builds within the 30-day window should be flagged."""
+        # Add a build from 25 days ago (inside 30-day window)
+        recent_date = (datetime.now() - timedelta(days=25)).strftime('%Y-%m-%d')
+        self.history['builds'].append({
+            'date': recent_date,
+            'project_name': 'kubernetes-monitor',
+            'title': 'Kubernetes cluster monitoring tool',
+            'keywords': ['kubernet', 'clust', 'monitor', 'tool']
+        })
+        
+        # This should be flagged (inside 30-day window)
+        result = is_duplicate('Kubernetes cluster monitoring dashboard', self.history)
+        self.assertIsNotNone(result)
+        self.assertTrue(result['is_duplicate'])
     
     def test_threshold_adjustment(self):
         """Test that custom threshold works."""
@@ -237,7 +253,7 @@ class TestDuplicateDetection(unittest.TestCase):
                 'keywords': []  # Empty keywords
             }],
             'rejections': [],
-            'dedup_window_days': 14
+            'dedup_window_days': 30
         }
         
         result = is_duplicate('PDF merge and split utility', history_no_keywords)
@@ -257,7 +273,7 @@ class TestHistoryUpdates(unittest.TestCase):
             'schema_version': 1,
             'builds': [],
             'rejections': [],
-            'dedup_window_days': 14
+            'dedup_window_days': 30
         }
         json.dump(initial_history, self.temp_file)
         self.temp_file.close()
@@ -389,7 +405,7 @@ class TestHistoryCleanup(unittest.TestCase):
                     'keywords': ['old']
                 }
             ],
-            'dedup_window_days': 14
+            'dedup_window_days': 30
         }
         
         json.dump(history, self.temp_file)
@@ -433,6 +449,56 @@ class TestHistoryCleanup(unittest.TestCase):
         
         self.assertEqual(len(history['builds']), 1)
         self.assertEqual(history['builds'][0]['project_name'], 'recent')
+    
+    def test_cleanup_90_days_default(self):
+        """Test cleanup with 90-day default (production setting)."""
+        # All entries in setUp are < 90 days old, so nothing should be removed
+        stats = cleanup_history(self.history_path)
+        
+        self.assertEqual(stats['builds_removed'], 0)
+        self.assertEqual(stats['rejections_removed'], 0)
+        
+        with open(self.history_path) as f:
+            history = json.load(f)
+        
+        self.assertEqual(len(history['builds']), 3)
+        self.assertEqual(len(history['rejections']), 1)
+    
+    def test_cleanup_90_days_with_ancient_entries(self):
+        """Test that entries older than 90 days are removed by default."""
+        # Add entries older than 90 days
+        with open(self.history_path) as f:
+            history = json.load(f)
+        
+        history['builds'].append({
+            'date': (datetime.now() - timedelta(days=95)).strftime('%Y-%m-%d'),
+            'project_name': 'ancient',
+            'title': 'Ancient build',
+            'keywords': ['ancient']
+        })
+        history['rejections'].append({
+            'date': (datetime.now() - timedelta(days=100)).strftime('%Y-%m-%d'),
+            'title': 'Ancient rejection',
+            'keywords': ['ancient']
+        })
+        
+        with open(self.history_path, 'w') as f:
+            json.dump(history, f)
+        
+        stats = cleanup_history(self.history_path)
+        
+        self.assertEqual(stats['builds_removed'], 1)
+        self.assertEqual(stats['rejections_removed'], 1)
+        
+        with open(self.history_path) as f:
+            history = json.load(f)
+        
+        # Original 3 builds + original 1 rejection should remain
+        self.assertEqual(len(history['builds']), 3)
+        self.assertEqual(len(history['rejections']), 1)
+        # Ancient entries should be gone
+        project_names = [b['project_name'] for b in history['builds']]
+        self.assertNotIn('ancient', project_names)
 
 
 if __name__ == '__main__':

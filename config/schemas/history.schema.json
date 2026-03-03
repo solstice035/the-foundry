@@ -81,8 +81,8 @@
     },
     "dedup_window_days": {
       "type": "integer",
-      "default": 14,
-      "description": "How many days to check for duplicates"
+      "default": 30,
+      "description": "How many days to check for duplicates (default: 30)"
     }
   }
 }

@@ -128,7 +128,7 @@ def is_duplicate(
     title: str,
     history: Dict,
     threshold: float = 0.5,
-    window_days: int = 14
+    window_days: int = 30
 ) -> Optional[Dict]:
     """
     Check if a trend title is a duplicate of a recent build.
@@ -137,7 +137,7 @@ def is_duplicate(
         title: The trend title to check
         history: History dict loaded from history.json
         threshold: Jaccard similarity threshold (default 0.5 = 50%)
-        window_days: How many days back to check (default 14)
+        window_days: How many days back to check (default 30)
         
     Returns:
         Dict with duplicate info if found, None otherwise
@@ -243,7 +243,7 @@ def add_build_to_history(
             'schema_version': 1,
             'builds': [],
             'rejections': [],
-            'dedup_window_days': 14
+            'dedup_window_days': 30
         }
     
     # Extract keywords if not provided
@@ -282,7 +282,7 @@ def add_rejection_to_history(
             'schema_version': 1,
             'builds': [],
             'rejections': [],
-            'dedup_window_days': 14
+            'dedup_window_days': 30
         }
     
     # Extract keywords if not provided
@@ -299,7 +299,7 @@ def add_rejection_to_history(
 
 def cleanup_history(
     history_path: str,
-    archive_days: int = 30
+    archive_days: int = 90
 ) -> Dict:
     """
     Clean up old entries from history.json.
@@ -308,7 +308,7 @@ def cleanup_history(
     
     Args:
         history_path: Path to history.json
-        archive_days: Keep entries from the last N days (default 30)
+        archive_days: Keep entries from the last N days (default 90)
         
     Returns:
         Dict with cleanup stats: {'builds_removed': 2, 'rejections_removed': 1}
@@ -378,7 +378,7 @@ if __name__ == '__main__':
             }
         ],
         'rejections': [],
-        'dedup_window_days': 14
+        'dedup_window_days': 30
     }
     
     test_title = "New PDF merging and splitting utility"

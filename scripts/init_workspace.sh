@@ -36,7 +36,7 @@ if [ ! -f "$HISTORY_FILE" ]; then
   "schema_version": 1,
   "builds": [],
   "rejections": [],
-  "dedup_window_days": 14
+  "dedup_window_days": 30
 }
 EOF
     echo -e "${GREEN}✓ Created $HISTORY_FILE${NC}"
