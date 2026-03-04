@@ -739,6 +739,103 @@ def process_trends(input_path: str, output_dir: str) -> Dict[str, Any]:
 # Entry Point
 # ============================================================================
 
+def history_dedup_trends(
+    trends_summary_path: str,
+    history_path: str,
+    threshold: float = 0.5,
+    window_days: int = 30
+) -> Dict[str, Any]:
+    """
+    Check trends-summary.json against build history for duplicates.
+    
+    Loads history.json, checks each trend via Jaccard similarity,
+    and flags duplicates with previously_built + duplicate_info fields.
+    
+    Gracefully handles missing or corrupt history.json by creating
+    a fresh empty history.
+    
+    Args:
+        trends_summary_path: Path to trends-summary.json
+        history_path: Path to history.json
+        threshold: Jaccard similarity threshold (default 0.5)
+        window_days: How many days back to check (default 30)
+        
+    Returns:
+        Stats dict: {
+            'total_trends': int,
+            'duplicates_flagged': int,
+            'history_builds': int,
+            'history_rejections': int,
+            'history_initialized': bool
+        }
+    """
+    from dedup import is_duplicate as dedup_is_duplicate
+
+    # Load trends summary
+    with open(trends_summary_path, 'r') as f:
+        trends_data = json.load(f)
+
+    # Load history (graceful handling of missing/corrupt)
+    history_initialized = False
+    try:
+        with open(history_path, 'r') as f:
+            history = json.load(f)
+        # Validate minimum structure
+        if not isinstance(history, dict) or 'builds' not in history:
+            raise ValueError("Invalid history structure")
+    except (FileNotFoundError, json.JSONDecodeError, ValueError):
+        # Create fresh history
+        history = {
+            'schema_version': 1,
+            'builds': [],
+            'rejections': [],
+            'dedup_window_days': window_days
+        }
+        Path(history_path).parent.mkdir(parents=True, exist_ok=True)
+        with open(history_path, 'w') as f:
+            json.dump(history, f, indent=2)
+        history_initialized = True
+        print(f"⚠️  History file missing or corrupt — initialized fresh: {history_path}")
+
+    # Check each trend against history
+    duplicates_flagged = 0
+    for trend in trends_data.get('trends', []):
+        dup = dedup_is_duplicate(
+            trend.get('title', ''),
+            history,
+            threshold=threshold,
+            window_days=window_days
+        )
+        if dup:
+            trend['previously_built'] = True
+            trend['duplicate_info'] = {
+                'reason': dup['reason'],
+                'similarity': dup['similarity'],
+                'matched_keywords': dup['matched_keywords']
+            }
+            duplicates_flagged += 1
+        else:
+            trend['previously_built'] = False
+
+    # Add metadata
+    trends_data['history_dedup_date'] = datetime.now().isoformat()
+    trends_data['previously_built_flagged'] = duplicates_flagged
+
+    # Write back
+    with open(trends_summary_path, 'w') as f:
+        json.dump(trends_data, f, indent=2, ensure_ascii=False)
+
+    print(f"✅ History dedup: {duplicates_flagged}/{len(trends_data.get('trends', []))} trends flagged as duplicates")
+
+    return {
+        'total_trends': len(trends_data.get('trends', [])),
+        'duplicates_flagged': duplicates_flagged,
+        'history_builds': len(history.get('builds', [])),
+        'history_rejections': len(history.get('rejections', [])),
+        'history_initialized': history_initialized
+    }
+
+
 if __name__ == '__main__':
     # Default paths
     input_path = Path.home() / '.openclaw/workspace/foundry/2026-02-18/trends-raw.json'

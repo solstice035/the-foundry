@@ -1,243 +1,268 @@
-# Instructions for Claude/AI Agents
+# CLAUDE.md
 
-**Project:** The Foundry 🏭  
-**Purpose:** Autonomous overnight app factory  
+This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
+
+## Project Overview
+
+**The Foundry** is an autonomous overnight app factory -- a multi-agent pipeline that scans trending developer pain points, selects one buildable idea per night, builds an MVP while the owner sleeps, pushes to GitHub, and delivers a morning briefing at 08:00.
+
 **Owner:** Nick Solly (jeeves@jeevesbot.io)
-
----
-
-## What This Project Is
-
-The Foundry is a multi-agent system that:
-1. **The Blacksmith** (foundry-blacksmith) coordinates the overnight pipeline
-2. **Trend Scout** (foundry-scout) scans trending developer pain points (X, Reddit, HN) at midnight
-3. **Spec Writer** (foundry-spec) selects one buildable trend
-4. **Builder** (foundry-builder) builds an MVP overnight using aider + LLM
-5. Pushes to GitHub and delivers a morning briefing at 8am
-
-**Status:** Design complete, awaiting implementation approval  
-**Timeline:** 16 weeks (3 phases, 16 epics)  
+**Status:** Phase 1 complete (5/5 epics), Phase 2 in progress (6 epics), Phase 3 planned (5 epics)
 **Cost:** ~$42-57/month when fully operational
 
----
+## Tech Stack
 
-## If You're Working on This Project
+- **Language:** Python 3.13+
+- **Package management:** pip + requirements.txt (no pyproject.toml)
+- **Testing:** pytest, pytest-cov, pytest-mock, pytest-timeout, responses (HTTP mocking)
+- **Linting:** ruff, mypy (type checking), black (formatting)
+- **Schema validation:** jsonschema
+- **HTTP:** requests
+- **Config:** PyYAML (YAML configs), python-dotenv (env vars)
+- **CLI:** click
+- **Logging:** structlog (structured logging)
+- **Build tool (downstream):** aider (LLM-assisted code generation)
+- **External APIs:** HN Algolia, Reddit JSON, X/Twitter
 
-### Before You Start
+## Architecture
 
-1. **Read the design docs:** All in `docs/` (symlinked to Obsidian)
-   - Start with `docs/README - Status & Next Steps.md`
-   - Then `docs/Implementation Plan - Epics.md` for the full breakdown
-   - Agent-specific: `docs/Agent Architecture.md`
+Multi-agent pipeline orchestrated by The Blacksmith:
 
-2. **Check the War Room:** http://localhost:3333
-   - Filter by project: "The Foundry"
-   - See which epics are in progress
-   - Don't duplicate work
+```
+The Blacksmith (foundry-blacksmith, Sonnet) -- coordinator
+  |
+  +-- 00:00-00:45  Trend Scout (foundry-scout, Haiku) -- scans HN, Reddit, X
+  +-- 00:45-01:30  Spec Writer (foundry-spec, Sonnet) -- evaluates & selects
+  +-- 01:30-07:00  Builder (foundry-builder, Sonnet + aider) -- builds MVP
+  +-- 08:00        Morning Briefing
+```
 
-3. **Understand the architecture:**
-   - 1 coordinator: The Blacksmith (foundry-blacksmith, Sonnet) spawns and monitors all agents
-   - 3 core agents: foundry-scout (Haiku) → foundry-spec (Sonnet) → foundry-builder (Sonnet + aider)
-   - 3 phases: Core Pipeline → Feedback Loop → Social Amplification
-   - 16 epics total, currently all in backlog
+Phase 2 adds feedback agents:
+- **Trend Researcher** (foundry-researcher) -- lifecycle tracking, enrichment
+- **Portfolio Curator** (foundry-curator) -- weekly portfolio reports
+- **Consensus Analyst** (foundry-analyst) -- multi-perspective evaluation
+- **Content Drafter** (foundry-drafter) -- social media content generation
 
-### Project Structure
+Agents are ephemeral (one task, no memory between runs). Continuity is file-based: each agent reads input files, writes output files, and the next agent in the pipeline picks up from there.
+
+## Project Structure
 
 ```
 the-foundry/
-├── docs/              Symlink to Obsidian design docs (read-only via git)
-├── src/               Agent task prompts, Python utilities, orchestration code
-├── scripts/           Deployment scripts, testing harnesses, admin tools
-├── config/            Agent configs, cron schedules, schema definitions
-├── tests/             Agent testing, validation, mock data
-└── README.md          Project overview
++-- src/
+|   +-- __init__.py
+|   +-- process_trends.py      # Core trend processing logic (30K lines)
+|   +-- dedup.py               # Deduplication engine (Jaccard similarity, 14-day window)
+|   +-- utils.py               # Common utilities (JSON I/O, keyword extraction, scoring)
+|   +-- utils_engagement.py    # Engagement tracking utilities
+|   +-- prompts/               # Agent task prompts (versioned markdown files)
+|   |   +-- foundry-scout-v1/v2/v3.md
+|   |   +-- foundry-spec-v1/v2.md
+|   |   +-- foundry-builder-v1/v2/v3-enhanced.md
+|   |   +-- foundry-blacksmith-v2.md
+|   |   +-- trend-researcher-mode-a-v1.md
+|   |   +-- consensus-analyst-v1.md
+|   |   +-- content-drafter-v1.md
+|   |   +-- portfolio-curator-v1.md
+|   +-- scripts/               # Operational scripts
+|       +-- check_engagement.py
+|       +-- multi_run_spawner.py
+|       +-- enhanced-build-loop.sh
+|       +-- cleanup_history.sh
++-- config/
+|   +-- schemas/               # JSON schemas (all include schema_version field)
+|   |   +-- build.schema.json
+|   |   +-- spec.schema.json
+|   |   +-- trends-summary.schema.json
+|   |   +-- consensus.schema.json
+|   |   +-- content-queue.schema.json
+|   |   +-- engagement.schema.json
+|   |   +-- metrics.schema.json
+|   |   +-- metrics-aggregated.schema.json
+|   |   +-- history.schema.json
+|   +-- cron-engagement.yml    # Cron schedule configuration
+|   +-- secrets.yaml           # Secrets template (empty, use .env)
++-- tests/
+|   +-- test_utils.py          # Utility function tests
+|   +-- test_dedup.py          # Deduplication logic tests
+|   +-- test_lifecycle.py      # Trend lifecycle tracking tests
+|   +-- test_engagement.py     # Engagement scoring tests
+|   +-- test_metrics.py        # Metrics calculation tests
+|   +-- test_consensus.py      # Consensus analyst tests
+|   +-- test_content_drafter.py # Content drafter tests
+|   +-- mock_trends/           # Multi-night mock trend data (4 nights)
+|   +-- mock_consensus/        # Mock consensus data
+|   +-- test_data/             # Additional test fixtures
+|   +-- README.md              # Test documentation
++-- social/                    # Social amplification (Phase 3)
+|   +-- voice-guide.md         # Voice & tone guidelines
+|   +-- patterns.md            # Content patterns
+|   +-- engagement-tracking.md # Engagement metrics
+|   +-- templates/             # Social post templates
+|   +-- assets/                # Visual assets
++-- docs/                      # Symlink -> Obsidian design docs (23 files, read-only via git)
++-- logs/                      # Runtime logs (gitignored)
++-- scripts/
+|   +-- init_workspace.sh      # Workspace initialization
++-- validate_consensus.py      # Standalone consensus validation
++-- .env.example               # Environment variable template
++-- requirements.txt           # Python dependencies
 ```
 
-### Code Guidelines
+**Runtime workspace** (not in this repo): `~/.openclaw/workspace/foundry/`
+```
+foundry/
++-- YYYY-MM-DD/              # Per-night run directory
+|   +-- trends-raw.json      # Scout output
+|   +-- trends-summary.json  # Scout summary (for Spec Writer)
+|   +-- trends-full/         # Full trend details
+|   +-- spec.json            # Spec Writer output
+|   +-- build.json           # Builder output
+|   +-- state.json           # Coordinator tracking
++-- history.json             # Past builds & rejections
++-- metrics.jsonl            # Nightly performance log
+```
 
-**Agent Task Prompts (src/):**
-- Write task strings for `sessions_spawn` calls
-- Include full context (no assumptions about what the agent knows)
-- Reference design docs explicitly (e.g., "See Builder-Coding-Agent Design.md")
+## Development Commands
+
+```bash
+# Install dependencies
+cd ~/projects/the-foundry
+pip install -r requirements.txt
+
+# Run all tests
+python -m pytest tests/ -v
+
+# Run specific test file
+python -m pytest tests/test_dedup.py -v
+
+# Run with coverage
+python -m pytest tests/ --cov=src --cov-report=term-missing
+
+# Run a specific test directly (some tests are executable)
+python3 tests/test_lifecycle.py
+
+# Lint
+ruff check src/ tests/
+ruff format --check src/ tests/
+
+# Type check
+mypy src/
+
+# Initialize workspace
+./scripts/init_workspace.sh
+
+# Validate a consensus output
+python validate_consensus.py
+```
+
+## Environment Variables
+
+Key variables from `.env.example`:
+
+| Variable | Purpose |
+|----------|---------|
+| `ANTHROPIC_API_KEY` | Claude models for aider |
+| `GITHUB_TOKEN` | Builder creates repos (scope: repo, workflow) |
+| `GITHUB_USERNAME` | GitHub account for repo creation |
+| `X_AUTH_TOKEN`, `X_CT0` | X/Twitter for Trend Scout |
+| `OPENCLAW_GATEWAY_URL` | OpenClaw gateway (default: localhost:4445) |
+| `FOUNDRY_WORKSPACE` | Runtime data path (~/.openclaw/workspace/foundry) |
+| `FOUNDRY_BUILDS` | Where Builder creates projects (~/projects/foundry) |
+| `LOG_LEVEL` | DEBUG, INFO, WARNING, ERROR |
+| `DRY_RUN` | Skip GitHub/social posting |
+| `TEST_MODE` | Use mock data instead of real APIs |
+
+## Coding Conventions
+
+### Python Style
+
+- **Type hints required** on all function parameters and return values (`from typing import ...`)
+- **Docstrings** on all functions (Google style: Args, Returns, Raises, Example sections)
+- **Error handling** for all network calls and file I/O -- never let an agent crash silently
+- **No hardcoded secrets** -- use environment variables via python-dotenv
+- **Pathlib** for file paths (`from pathlib import Path`), not os.path
+- **Structured logging** via structlog, not print statements
+- **UTF-8 encoding** explicitly specified on all file open() calls
+
+### Agent Task Prompts
+
+- Write as versioned markdown files in `src/prompts/` (e.g., `foundry-scout-v3.md`)
+- Include full context -- agents wake up with no memory
+- Specify exact input file paths, output file paths, and JSON schemas
+- Document failure modes and recovery steps
+- Include explicit timeouts in seconds
 - Test prompts 3-5 times with same input before committing
-- Document expected outputs (schema, file paths)
+- Reference design docs by filename when relevant
 
-**Python Utilities (src/):**
-- Type hints required (`from typing import ...`)
-- Docstrings for all functions
-- Error handling for network calls, file I/O
-- No hardcoded secrets (use environment variables)
-- Test coverage for critical paths
+### Configuration
 
-**Configuration (config/):**
-- YAML for agent configs, cron schedules
-- JSON for schemas (with `schema_version` field)
+- **YAML** for agent configs and cron schedules
+- **JSON** for schemas -- every schema must include a `schema_version` field
 - Comments explaining non-obvious settings
-- Validate before committing (schema checkers)
+- Validate schemas before committing
 
-**Testing (tests/):**
-- Mock external APIs (HN, Reddit, X, GitHub)
-- Test failure modes (timeouts, rate limits, bad data)
-- Integration tests for multi-agent handoffs
+### Testing
+
+- Mock external APIs (HN, Reddit, X, GitHub) using `responses` library
+- Test failure modes: timeouts, rate limits, bad data, missing sources
+- Integration tests for multi-agent handoffs (Scout output -> Spec Writer input)
+- All scoring logic must be deterministic (same input -> same output)
 - Run before every commit
 
-### What NOT to Do
+### JSON Schema Rules
 
-❌ **Don't skip the design docs** — they exist for a reason  
-❌ **Don't hardcode secrets** — use env vars or 1Password  
-❌ **Don't commit runtime data** — .gitignore handles this  
-❌ **Don't break the multi-agent flow** — agents are sequential, not parallel (Phase 1)  
-❌ **Don't add dependencies without asking** — keep it lightweight  
-❌ **Don't deploy without testing** — test locally first, dry run in isolation
+- Every output schema includes `schema_version` field
+- All file paths in schemas are absolute or explicitly relative
+- All timeouts specified in seconds
+- All API endpoints tested before documenting
 
-### Git Workflow
+## Git Workflow
 
-**Branching:**
-- `main` branch is the source of truth
+- **main** branch is source of truth
 - Feature branches: `epic/1.1-trend-scout-data` (per epic)
 - Bug fixes: `fix/description`
 - Experiments: `exp/description`
+- Commit message format: reference epic number, list changes, note acceptance criteria status
+- No PRs required (solo project, reviewed via War Room at http://localhost:3333)
 
-**Commits:**
-- One epic = one or more focused commits
-- Commit message format:
-  ```
-  Epic 1.1: Trend Scout data collection
-  
-  - Implemented HN Algolia API integration
-  - Added Reddit JSON endpoint fetching (5 subreddits)
-  - X/Twitter bird CLI searches (3 queries)
-  - Per-source timeout enforcement (5 min)
-  - Tests: individual source validation
-  
-  Acceptance criteria: 6/6 complete
-  ```
+## Key Design Decisions
 
-**Pull Requests:**
-- Not required (solo project, Nick reviews via War Room)
-- If used: reference epic number, link design doc, list acceptance criteria
+- **Agents are sequential, not parallel** (Phase 1) -- Scout -> Spec -> Builder
+- **File-based handoffs** between agents (JSON files in workspace)
+- **Graceful degradation** -- partial success > full failure (e.g., 2/3 sources is OK)
+- **Cost capping** via concrete timeouts and model selection (Haiku for Scout, Sonnet for Spec/Builder)
+- **Deduplication** uses 14-day window, keyword overlap, Jaccard similarity (threshold 0.5)
+- **aider** for building, not pty-based Claude Code
+- **Builder tool** creates real GitHub repos via GitHub API
 
-### Testing Strategy
+## Anti-Patterns
 
-**Before committing any agent code:**
+- Do NOT skip the design docs in `docs/` -- they are the source of truth for all decisions
+- Do NOT hardcode secrets -- use env vars or the .env file
+- Do NOT commit runtime data -- the .gitignore handles workspace artifacts
+- Do NOT break the sequential agent flow -- agents depend on previous outputs
+- Do NOT add dependencies without discussing -- keep the stack lightweight
+- Do NOT deploy without testing -- test locally first, dry run in isolation
+- Do NOT assume schemas or API column names -- verify against actual source before documenting
 
-1. **Unit test:** Individual functions (keyword extraction, normalization, scoring)
-2. **Mock test:** Agent with mocked API responses
-3. **Live test:** Agent with real APIs (rate limit aware)
-4. **Integration test:** Full pipeline (Scout → Spec → Builder)
-5. **Failure test:** Timeouts, bad data, source failures
-6. **Consistency test:** Run 3-5 times, verify output similarity
+## External Dependencies
 
-**Acceptance criteria must be verifiable** — write tests that check them.
+- **War Room:** http://localhost:3333 (Mission Control task board, filter by project "The Foundry")
+- **Mission Control:** http://localhost:5173 (full dashboard)
+- **OpenClaw gateway:** localhost:4445 (agent spawn/management)
+- **Design docs:** `docs/` symlink to Obsidian vault at `/Users/jeeves/Obsidian/jeeves/1-Projects/The Foundry`
+- **GitHub:** Repos created under `jeevesbot-io` account
+- **HN Algolia API:** `http://hn.algolia.com/api/v1/search` (public, no auth)
+- **Reddit JSON:** `https://www.reddit.com/r/{subreddit}/hot.json` (public, may rate-limit)
+- **X/Twitter:** Requires auth tokens extracted from browser session
 
-### When You Get Stuck
+## Key Documents to Read First
 
-1. **Check the design docs** — likely already answered
-2. **Review the independent review** (`docs/Independent review.md`) — common issues addressed
-3. **Look at `docs/Response to Review.md`** — explains design decisions
-4. **Ask Nick** — he's the product owner, final say on all decisions
-
-### Voice & Tone for Agent Prompts
-
-**The Foundry agents should:**
-- Be direct and specific (no fluff)
-- Include explicit schemas and output paths
-- Document failure modes and recovery
-- Reference design docs by name
-- Use concrete examples (not abstract descriptions)
-
-**Example of good agent prompt:**
-```
-You are the Trend Scout for The Foundry.
-
-Mission: Scan HN, Reddit, and X for trending developer pain points.
-
-Data sources:
-1. HN Algolia API: http://hn.algolia.com/api/v1/search?tags=story&numericFilters=created_at_i>{unix_24h_ago}
-2. Reddit JSON: https://www.reddit.com/r/programming/hot.json?limit=25
-3. X via bird CLI: bird search "#buildinpublic" -n 30
-
-For each source:
-- Timeout: 5 minutes
-- If fails: log error, continue with remaining sources
-- Minimum: 2/3 sources must succeed
-
-Output: ~/.openclaw/workspace/foundry/YYYY-MM-DD/trends-raw.json
-Schema: See docs/Deep Dive - Trend Research.md, section "Common Trend Schema"
-
-If you encounter rate limits, document in output and continue.
-```
-
-**Example of bad agent prompt:**
-```
-Scan the web for trending topics and return a JSON file with the results.
-```
-
-### Documentation Discipline
-
-**From AGENTS.md:**
-> Verify before documenting. Never assume schemas, APIs, or column names — check the source of truth first. LLMs hallucinate plausible-sounding details with total confidence. If you document something wrong, every agent downstream inherits the mistake.
-
-**For The Foundry specifically:**
-- All JSON schemas must include `schema_version` field
-- All file paths must be absolute or explicitly relative
-- All timeouts must be specified in seconds
-- All API endpoints must be tested before documenting
-- All error messages must be actionable
-
-### Context for This Project
-
-**Why The Foundry exists:**
-- Nick wants autonomous overnight builds from trending topics
-- Multi-agent pipeline ensures quality (Scout finds, Spec evaluates, Builder builds)
-- Learning loops prevent duplicates and optimize over time
-- Social amplification shares successful builds
-
-**Design philosophy:**
-- Agents are specialized, not generalist
-- Each agent has clear inputs/outputs (file-based handoffs)
-- Failures degrade gracefully (partial success > full failure)
-- Everything is observable (state files, logs, metrics)
-- Cost is capped (concrete timeouts, model selection)
-
-**What success looks like:**
-- First autonomous night within 2 weeks of starting Epic 1.1
-- 5 consecutive nights without manual intervention (Phase 1 exit criteria)
-- Zero duplicate builds after Phase 2
-- Content automation reduces Nick's posting time to <15 min/day (Phase 3)
-
----
-
-## Emergency Contacts
-
-**Project Owner:** Nick Solly  
-**Primary Agent:** Jeeves (main OpenClaw session)  
-**War Room:** http://localhost:3333  
-**Documentation:** `~/projects/the-foundry/docs/`  
-**Workspace:** `~/.openclaw/workspace/foundry/` (runtime data)
-
----
-
-## Quick Reference
-
-**Design docs to read first:**
-1. `README - Status & Next Steps.md` — current state
-2. `Implementation Plan - Epics.md` — all 16 epics
-3. `Agent Architecture.md` — agent specs
-4. `Builder-Coding-Agent Design.md` — most complex component
-5. `Independent review.md` — comprehensive review
-
-**Key decisions:**
-- Coordinator: The Blacksmith (foundry-blacksmith, Sonnet) - orchestrates entire pipeline
-- Models: Haiku (foundry-scout), Sonnet (foundry-spec + foundry-builder)
-- Sources: HN, Reddit (5 subs), X (3 searches) in Phase 1
-- Builder tool: aider (not pty-based Claude Code)
-- Timing: 00:00 (Blacksmith spawns) → 00:00-00:45 (Scout) → 00:45-01:30 (Spec) → 01:30-07:00 (Builder) → 08:00 (Briefing)
-- Dedup: 14-day window, keyword overlap, Jaccard similarity
-
-**Don't change these without asking Nick.**
-
----
-
-**Last Updated:** 2026-02-18  
-**Status:** Design complete, awaiting implementation approval
+1. `docs/README - Status & Next Steps.md` -- current state
+2. `docs/Implementation Plan - Epics.md` -- all 16 epics
+3. `docs/Agent Architecture.md` -- agent specifications
+4. `docs/Builder-Coding-Agent Design.md` -- most complex component
+5. `docs/Independent review.md` -- comprehensive external review
+6. `MASTER-STATUS.md` -- overall progress tracker
+7. `AGENTS.md` -- instructions for spawned sub-agents

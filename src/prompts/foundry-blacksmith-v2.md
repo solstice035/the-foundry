@@ -27,8 +27,13 @@ Execute stages sequentially. Each stage spawns a sub-agent, waits for completion
 
 1. Determine today's date (YYYY-MM-DD format)
 2. Create workspace directory: `mkdir -p ~/.openclaw/workspace/foundry/YYYY-MM-DD`
-3. Initialize `state.json` with pipeline status "started"
-4. Log pipeline start time
+3. **Clean up old history entries** (removes builds/rejections older than 7 days):
+   ```bash
+   cd ~/projects/the-foundry && python3 src/scripts/cleanup_history.py --days 7
+   ```
+   This keeps `history.json` lean while preserving the 7-day dedup window. Gracefully handles missing or corrupt files.
+4. Initialize `state.json` with pipeline status "started"
+5. Log pipeline start time
 
 ### Stage 1: Trend Scout (max 45 minutes)
 
