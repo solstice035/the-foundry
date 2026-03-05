@@ -7,7 +7,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 **The Foundry** is an autonomous overnight app factory -- a multi-agent pipeline that scans trending developer pain points, selects one buildable idea per night, builds an MVP while the owner sleeps, pushes to GitHub, and delivers a morning briefing at 08:00.
 
 **Owner:** Nick Solly (jeeves@jeevesbot.io)
-**Status:** Phase 1 complete (5/5 epics), Phase 2 in progress (6 epics), Phase 3 planned (5 epics)
+**Status:** Phase 1 complete (5/5 epics), Phase 2 complete (6/6 epics), Phase 3 in progress (Epic 3.1a complete)
 **Cost:** ~$42-57/month when fully operational
 
 ## Tech Stack
@@ -37,11 +37,11 @@ The Blacksmith (foundry-blacksmith, Sonnet) -- coordinator
   +-- 08:00        Morning Briefing
 ```
 
-Phase 2 adds feedback agents:
-- **Trend Researcher** (foundry-researcher) -- lifecycle tracking, enrichment
-- **Portfolio Curator** (foundry-curator) -- weekly portfolio reports
-- **Consensus Analyst** (foundry-analyst) -- multi-perspective evaluation
-- **Content Drafter** (foundry-drafter) -- social media content generation
+Phase 2 adds feedback agents (all complete):
+- **Trend Researcher** (foundry-researcher) -- Mode A: nightly lifecycle enrichment; Mode B: 2x/week deep forecasting
+- **Portfolio Curator** (foundry-curator) -- weekly portfolio reports (Sunday 20:00)
+- **Consensus Analyst** (foundry-analyst) -- multi-perspective evaluation (auto-triggered from engagement check)
+- **Content Drafter** (foundry-drafter) -- social media content generation (Phase 3)
 
 Agents are ephemeral (one task, no memory between runs). Continuity is file-based: each agent reads input files, writes output files, and the next agent in the pipeline picks up from there.
 
@@ -49,6 +49,7 @@ Agents are ephemeral (one task, no memory between runs). Continuity is file-base
 
 ```
 the-foundry/
++-- conftest.py                # pytest path fix (adds repo root to sys.path)
 +-- src/
 |   +-- __init__.py
 |   +-- process_trends.py      # Core trend processing logic (30K lines)
@@ -60,15 +61,17 @@ the-foundry/
 |   |   +-- foundry-spec-v1/v2.md
 |   |   +-- foundry-builder-v1/v2/v3-enhanced.md
 |   |   +-- foundry-blacksmith-v2.md
-|   |   +-- trend-researcher-mode-a-v1.md
+|   |   +-- trend-researcher-mode-a-v1.md   # Nightly lifecycle enrichment
+|   |   +-- trend-researcher-mode-b-v1.md   # Deep forecasting (2x/week)
 |   |   +-- consensus-analyst-v1.md
 |   |   +-- content-drafter-v1.md
 |   |   +-- portfolio-curator-v1.md
 |   +-- scripts/               # Operational scripts
-|       +-- check_engagement.py
+|       +-- check_engagement.py    # Daily GitHub engagement check + consensus trigger
+|       +-- cleanup_history.py     # History cleanup with --deep flag (workspace/trends/forecasts)
+|       +-- aggregate_metrics.py   # Weekly metrics aggregation from metrics.jsonl
 |       +-- multi_run_spawner.py
-|       +-- enhanced-build-loop.sh
-|       +-- cleanup_history.sh
+|       +-- test_briefing.py
 +-- config/
 |   +-- schemas/               # JSON schemas (all include schema_version field)
 |   |   +-- build.schema.json
@@ -76,10 +79,13 @@ the-foundry/
 |   |   +-- trends-summary.schema.json
 |   |   +-- consensus.schema.json
 |   |   +-- content-queue.schema.json
+|   |   +-- content-history.schema.json
+|   |   +-- voice-patterns.schema.json
 |   |   +-- engagement.schema.json
 |   |   +-- metrics.schema.json
 |   |   +-- metrics-aggregated.schema.json
 |   |   +-- history.schema.json
+|   |   +-- forecast.schema.json
 |   +-- cron-engagement.yml    # Cron schedule configuration
 |   +-- secrets.yaml           # Secrets template (empty, use .env)
 +-- tests/
@@ -90,6 +96,7 @@ the-foundry/
 |   +-- test_metrics.py        # Metrics calculation tests
 |   +-- test_consensus.py      # Consensus analyst tests
 |   +-- test_content_drafter.py # Content drafter tests
+|   +-- test_content_queue.py  # Content queue schema validation (25 tests)
 |   +-- mock_trends/           # Multi-night mock trend data (4 nights)
 |   +-- mock_consensus/        # Mock consensus data
 |   +-- test_data/             # Additional test fixtures
@@ -98,6 +105,7 @@ the-foundry/
 |   +-- voice-guide.md         # Voice & tone guidelines
 |   +-- patterns.md            # Content patterns
 |   +-- engagement-tracking.md # Engagement metrics
+|   +-- manual-posts/          # 5 drafts from real builds (Epic 3.1a)
 |   +-- templates/             # Social post templates
 |   +-- assets/                # Visual assets
 +-- docs/                      # Symlink -> Obsidian design docs (23 files, read-only via git)
@@ -113,14 +121,25 @@ the-foundry/
 ```
 foundry/
 +-- YYYY-MM-DD/              # Per-night run directory
-|   +-- trends-raw.json      # Scout output
-|   +-- trends-summary.json  # Scout summary (for Spec Writer)
+|   +-- trends-raw.json      # Scout output (raw, before lifecycle enrichment)
+|   +-- trends-summary.json  # Enriched summary (for Spec Writer)
 |   +-- trends-full/         # Full trend details
 |   +-- spec.json            # Spec Writer output
 |   +-- build.json           # Builder output
+|   +-- engagement.json      # Daily engagement check results
 |   +-- state.json           # Coordinator tracking
-+-- history.json             # Past builds & rejections
+|   +-- briefing.json        # Morning briefing output
++-- history.json             # Past builds & rejections (7-day cleanup window)
 +-- metrics.jsonl            # Nightly performance log
++-- trend-history/           # Multi-day trend tracking (14-day retention)
++-- forecasts/               # Deep trend forecasts (30-day retention)
+|   +-- forecast-YYYY-MM-DD.json
++-- analysis/                # Consensus Analyst outputs
+|   +-- YYYYMMDD-{project}-consensus.json
++-- social/                  # Social amplification runtime data
+|   +-- voice-patterns.json  # Learned voice patterns (agent-writable)
+|   +-- content-queue.json   # Draft queue for manual posting
+|   +-- content-history.json # Voice learning history (future)
 ```
 
 ## Development Commands

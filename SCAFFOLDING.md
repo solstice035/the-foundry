@@ -1,7 +1,7 @@
 # Scaffolding Status
 
-**Last Updated:** 2026-02-18  
-**Status:** ✅ Complete — Ready for Epic 1.1
+**Last Updated:** 2026-03-05
+**Status:** ✅ Phase 1 & 2 complete, Phase 3 Epic 3.1a in progress
 
 ---
 
@@ -9,12 +9,15 @@
 
 ### 📄 Documentation
 
-| File | Purpose | Size | Status |
-|------|---------|------|--------|
-| README.md | Project overview | 2.4 KB | ✅ |
-| CLAUDE.md | AI agent instructions | 8.3 KB | ✅ |
-| AGENTS.md | Sub-agent instructions | 14 KB | ✅ |
-| docs/ | Design docs symlink | 19 files | ✅ |
+| File | Purpose | Status |
+|------|---------|--------|
+| README.md | Project overview | ✅ |
+| CLAUDE.md | AI agent instructions | ✅ |
+| AGENTS.md | Sub-agent instructions | ✅ |
+| STATUS.md | Current status | ✅ |
+| MASTER-STATUS.md | Master progress tracker | ✅ |
+| VALIDATION.md | Phase 1 validation | ✅ |
+| docs/ | Design docs symlink (23 files) | ✅ |
 
 ### ⚙️ Configuration
 
@@ -22,49 +25,45 @@
 |----------------|---------|--------|
 | .env.example | Environment variable template | ✅ |
 | .gitignore | Comprehensive ignore patterns | ✅ |
-| config/schemas/ | JSON schemas for all outputs | ✅ |
-| └── trends-summary.schema.json | Trend Scout output schema | ✅ |
-| └── spec.schema.json | Spec Writer output schema | ✅ |
-| └── build.schema.json | Builder output schema | ✅ |
-| └── history.schema.json | Deduplication tracking schema | ✅ |
+| conftest.py | pytest path fix (sys.path) | ✅ |
+| config/schemas/ | JSON schemas for all outputs (12 schemas) | ✅ |
 
 ### 🐍 Python Setup
 
-| File | Purpose | Lines | Status |
-|------|---------|-------|--------|
-| requirements.txt | Python dependencies | 68 | ✅ |
-| src/__init__.py | Package init | 6 | ✅ |
-| src/utils.py | Common utilities | 258 | ✅ |
+| File | Purpose | Status |
+|------|---------|--------|
+| requirements.txt | Python dependencies | ✅ |
+| src/__init__.py | Package init | ✅ |
+| src/utils.py | Common utilities (keyword extraction, scoring, JSON I/O) | ✅ |
+| src/dedup.py | Deduplication engine (Jaccard similarity, 14-day window) | ✅ |
+| src/process_trends.py | Core trend processing logic | ✅ |
+| src/utils_engagement.py | Engagement tracking utilities | ✅ |
 
-**Dependencies included:**
-- Core: jsonschema, requests, python-dateutil, python-dotenv
-- Testing: pytest, pytest-cov, pytest-mock, responses
-- Development: mypy, ruff, black
-- Utilities: PyYAML, click, structlog
+**Scripts (src/scripts/):**
+| File | Purpose | Status |
+|------|---------|--------|
+| check_engagement.py | Daily GitHub engagement + consensus auto-trigger | ✅ |
+| cleanup_history.py | History cleanup with --deep (workspace/trends/forecasts) | ✅ |
+| aggregate_metrics.py | Weekly metrics aggregation from metrics.jsonl | ✅ |
+| multi_run_spawner.py | Multi-run pipeline spawner | ✅ |
 
-**Utilities implemented:**
-- `extract_keywords()` — keyword extraction for dedup
-- `jaccard_similarity()` — set similarity scoring
-- `keyword_overlap()` — text similarity via keywords
-- `is_duplicate()` — duplicate detection with threshold
-- `normalize_engagement()` — HN/Reddit/X → 0-100 scale
-- `cross_source_amplification()` — multi-platform boost
-- `load_json()` / `save_json()` — JSON I/O helpers
-- `validate_schema()` — JSON schema validation
-- `get_today_date()` / `get_today_datetime()` — date helpers
+**Agent Prompts (src/prompts/):** 14 versioned markdown files covering all pipeline agents.
 
 ### 🧪 Testing
 
-| File | Purpose | Tests | Status |
-|------|---------|-------|--------|
-| tests/README.md | Test strategy docs | — | ✅ |
-| tests/test_utils.py | Utils test suite | 30+ | ✅ |
+| File | Purpose | Status |
+|------|---------|--------|
+| tests/test_utils.py | Utils test suite | ✅ |
+| tests/test_dedup.py | Deduplication logic tests | ✅ |
+| tests/test_lifecycle.py | Trend lifecycle tracking | ✅ |
+| tests/test_engagement.py | Engagement scoring tests | ✅ |
+| tests/test_metrics.py | Metrics calculation tests | ✅ |
+| tests/test_consensus.py | Consensus analyst tests | ✅ |
+| tests/test_content_drafter.py | Content drafter tests | ✅ |
+| tests/test_content_queue.py | Content queue schema validation (25 tests) | ✅ |
+| tests/README.md | Test strategy docs | ✅ |
 
-**Test coverage:**
-- 6 test classes
-- 30+ test cases
-- 100% coverage of src/utils.py
-- Examples of mocking, fixtures, parametrization
+**Test coverage:** 114 tests passing across 8 test files.
 
 ### 🔧 Scripts
 
@@ -83,136 +82,77 @@
 
 ```
 the-foundry/
-├── .git/                       ✅ 3 commits
-├── .gitignore                  ✅ Comprehensive
-├── .env.example                ✅ All secrets documented
-├── README.md                   ✅ Project overview
-├── CLAUDE.md                   ✅ AI agent instructions
-├── AGENTS.md                   ✅ Sub-agent instructions
+├── .git/
+├── .gitignore
+├── .env.example
+├── conftest.py                 # pytest path fix
+├── README.md
+├── CLAUDE.md
+├── AGENTS.md
+├── STATUS.md
+├── MASTER-STATUS.md
+├── VALIDATION.md
 ├── config/
-│   └── schemas/                ✅ 4 schemas defined
+│   └── schemas/                # 12 JSON schemas
 ├── src/
-│   ├── __init__.py             ✅ Package init
-│   └── utils.py                ✅ 258 lines, 10 functions
+│   ├── __init__.py
+│   ├── utils.py
+│   ├── dedup.py
+│   ├── process_trends.py
+│   ├── utils_engagement.py
+│   ├── prompts/                # 14 agent prompt files
+│   └── scripts/                # 4 operational scripts
 ├── scripts/
-│   └── init_workspace.sh       ✅ Executable, tested
-├── tests/
-│   ├── README.md               ✅ Test strategy
-│   └── test_utils.py           ✅ 30+ tests
-├── docs/                       ✅ Symlink to Obsidian
-└── requirements.txt            ✅ 68 lines, organized
+│   └── init_workspace.sh
+├── tests/                      # 8 test files, 114 tests
+├── social/                     # Phase 3 voice guide, patterns, manual posts
+│   └── manual-posts/           # 5 drafts from real builds
+├── docs/                       # Symlink to Obsidian (23 files)
+└── requirements.txt
 ```
 
 ---
 
-## What's NOT Needed (Yet)
+## What's Been Added Since Scaffolding
 
-### ❌ Not Blocking Epic 1.1
+### Phase 1 (2026-02-18)
 
-These can be added later as epics progress:
+- Agent task prompts (Scout v1-v3, Spec v1, Builder v1-v3, Blacksmith v1)
+- Core processing (process_trends.py, dedup.py)
+- Workspace initialization and cron setup
 
-**Agent-specific code:**
-- `src/trend_scout.py` → Epic 1.1
-- `src/spec_writer.py` → Epic 1.3
-- `src/builder.py` → Epic 1.4
+### Phase 2 (2026-03-05)
 
-**Test fixtures:**
-- `tests/fixtures/` → As agents are built
-- Mock API responses → As integrations are built
-
-**Additional schemas:**
-- `metrics.schema.json` → Epic 2.2
-- `consensus.schema.json` → Epic 2.5
-- `content-queue.schema.json` → Epic 3.2
-
-**CI/CD:**
-- Not applicable (no remote repo, manual project)
+- Spec Writer v2 (forecast integration)
+- Blacksmith v2 (engagement in briefing)
+- Trend Researcher Mode A (lifecycle) + Mode B (forecasting)
+- Consensus Analyst v1 (auto-triggered)
+- Scripts: cleanup_history.py (--deep), aggregate_metrics.py, check_engagement.py (consensus trigger)
+- Schemas: forecast.schema.json, metrics-aggregated.schema.json
+- Tests: 7 test files, 89 tests total
+- conftest.py for pytest imports
 
 ---
 
-## Pre-Implementation Checklist
+### Phase 3 Epic 3.1a (2026-03-05)
 
-Before starting Epic 1.1, verify:
-
-### Environment Setup
-
-- [ ] Copy `.env.example` to `.env`
-- [ ] Fill in credentials:
-  - [ ] `ANTHROPIC_API_KEY` (for aider)
-  - [ ] `GITHUB_TOKEN` (for repo creation)
-  - [ ] `X_AUTH_TOKEN` / `X_CT0` (for bird CLI)
-- [ ] Install Python dependencies: `pip install -r requirements.txt`
-- [ ] Run workspace initialization: `./scripts/init_workspace.sh`
-- [ ] Verify workspace created: `ls ~/.openclaw/workspace/foundry/`
-
-### OpenClaw Configuration
-
-- [ ] Register `foundry-scout` agent in gateway config
-- [ ] Register `foundry-spec` agent in gateway config
-- [ ] Register `foundry-builder` agent in gateway config
-- [ ] Set agent models (Haiku, Sonnet, Sonnet)
-- [ ] Set agent timeouts (2700s, 2700s, 19800s)
-
-### External Tools
-
-- [ ] Verify `aider` installed: `which aider`
-- [ ] Verify `gh` CLI authenticated: `gh auth status`
-- [ ] Verify `bird` CLI working: `bird search "test" -n 1`
-- [ ] Verify `git` configured: `git config user.name`
-
-### Testing
-
-- [ ] Run test suite: `pytest tests/test_utils.py`
-- [ ] Verify 100% pass rate
-- [ ] Check coverage: `pytest --cov=src tests/`
-
----
-
-## What Happens Next
-
-**When Epic 1.1 starts:**
-
-1. Create `src/trend_scout/` module
-2. Write agent task prompt (references schemas, design docs)
-3. Implement HN/Reddit/X fetching
-4. Implement normalization + scoring
-5. Write integration tests
-6. Test with real APIs (rate-limit aware)
-7. Commit to git
-
-**Each epic adds:**
-- Agent-specific code in `src/`
-- Agent task prompts
-- Integration tests in `tests/`
-- Git commit with acceptance criteria
-
----
-
-## Scaffolding Quality Checklist
-
-✅ **All JSON outputs have schemas**  
-✅ **All schemas include `schema_version` field**  
-✅ **Utilities have 100% test coverage**  
-✅ **Scripts are executable and documented**  
-✅ **Dependencies are organized and commented**  
-✅ **Environment variables are documented**  
-✅ **Git ignores secrets and runtime data**  
-✅ **Documentation cross-references design docs**  
-✅ **Testing strategy is defined**  
-✅ **Workspace initialization is automated**
+- Voice guide v1.1 (grounded in real build data from 12 pipeline runs)
+- Patterns v1.1 (baseline observations from build metrics)
+- content-history.schema.json (voice learning history)
+- voice-patterns.schema.json (learned voice patterns)
+- voice-patterns.json seed file (workspace: ~/.openclaw/workspace/foundry/social/)
+- content-queue.json initialized with 5 drafts (workspace)
+- 5 manual post drafts in social/manual-posts/ (deptox, terminal-phone, process thread, tool-lint, failure)
+- test_content_queue.py (25 schema validation tests)
+- Tests: 8 test files, 114 tests total
 
 ---
 
 ## Summary
 
-**Scaffolding is complete.** All infrastructure is in place to begin Epic 1.1.
-
-**Next action:** Nick approves start of Phase 1 → Move Epic 1.1 to "Todo" in War Room → Begin implementation.
-
-**Estimated time to first code:** <1 hour after approval (agent task prompt + HN integration)
+Phase 1 and Phase 2 are fully delivered. Phase 3 Epic 3.1a (Voice Guide & Manual Posting — artifacts) is complete. Epic 3.1b (Nick manually posts for 2-3 weeks to calibrate voice) is next.
 
 ---
 
-**Last Updated:** 2026-02-18  
-**Git Commits:** 3  
-**Status:** ✅ Ready for implementation
+**Last Updated:** 2026-03-05
+**Status:** Phase 3 Epic 3.1a complete, 3.1b pending (manual posting)
