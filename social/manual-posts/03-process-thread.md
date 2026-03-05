@@ -49,3 +49,5 @@ Not sharing this to flex. Sharing it because the cost of trying ideas just colla
 - The org link at the end lets people browse all repos without being directed to one.
 - Risk: "autonomous AI pipeline" could trigger eye-rolls if it sounds like vaporware. The specific numbers ($0.41, 13 minutes, 91.7%) counter that.
 - Could add a Tweet 0 teaser the day before: "Running an experiment. Results tomorrow." — but that's engagement bait territory, so probably skip it.
+- Reddit omitted deliberately — process threads perform better as X threads. A Reddit version would need a different structure (Show HN style or blog post link). Consider adapting for r/SideProject once the X version is validated.
+- This draft replaces the originally planned reddit-keyword-monitor build announcement. The process thread about all 12 builds is higher-value content — a single build post for reddit-keyword-monitor (engagement 85.0) would be redundant given it's already mentioned in Tweet 4. If a 6th post is needed, reddit-keyword-monitor is the next candidate.

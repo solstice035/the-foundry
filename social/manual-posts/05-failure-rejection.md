@@ -27,3 +27,4 @@ Ran my overnight AI build pipeline 12 times. 11 produced working repos. One nigh
 - Best posted after the process thread (Draft 3) so there's context about the pipeline. Without that context, this tweet is too cryptic.
 - Priority 3 because it's optional — but if the process thread gets traction, this is a strong follow-up 2-3 days later.
 - The "that's the right failure mode" closing line is the thesis. A system that fails by doing nothing and costing nothing is well-designed. Let the reader arrive at that conclusion.
+- Reddit omitted deliberately — a single vulnerability tweet about one quiet night doesn't translate to a Reddit post. Not enough substance for r/SideProject's expected depth.
