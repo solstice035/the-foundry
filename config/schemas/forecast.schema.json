@@ -1,0 +1,176 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://foundry.jeevesbot.io/schemas/forecast.schema.json",
+  "title": "Deep Trend Forecast",
+  "description": "Multi-day trend analysis with emerging themes and predictions",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "generated_at",
+    "period",
+    "emerging_themes",
+    "pain_point_tracker",
+    "tech_shifts",
+    "recommended_categories"
+  ],
+  "properties": {
+    "schema_version": {
+      "type": "integer",
+      "const": 1
+    },
+    "generated_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "period": {
+      "type": "object",
+      "required": ["start", "end", "days_analyzed"],
+      "properties": {
+        "start": {
+          "type": "string",
+          "format": "date"
+        },
+        "end": {
+          "type": "string",
+          "format": "date"
+        },
+        "days_analyzed": {
+          "type": "integer",
+          "minimum": 1
+        }
+      }
+    },
+    "emerging_themes": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["theme", "evidence", "confidence", "buildable_opportunity"],
+        "properties": {
+          "theme": {
+            "type": "string",
+            "description": "Name of the emerging theme"
+          },
+          "evidence": {
+            "type": "array",
+            "items": { "type": "string" },
+            "minItems": 1,
+            "description": "URLs or descriptions of evidence"
+          },
+          "confidence": {
+            "type": "string",
+            "enum": ["low", "medium", "high"]
+          },
+          "buildable_opportunity": {
+            "type": "string",
+            "description": "Concrete app/tool idea that could address this theme"
+          },
+          "sources": {
+            "type": "array",
+            "items": { "type": "string" },
+            "description": "Which platforms (hn, reddit, github, x) show this trend"
+          },
+          "first_seen": {
+            "type": "string",
+            "format": "date"
+          },
+          "momentum": {
+            "type": "string",
+            "enum": ["accelerating", "steady", "decelerating"]
+          }
+        }
+      }
+    },
+    "pain_point_tracker": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["pain_point", "frequency", "existing_solutions", "gap"],
+        "properties": {
+          "pain_point": {
+            "type": "string",
+            "description": "Description of the developer pain point"
+          },
+          "frequency": {
+            "type": "integer",
+            "minimum": 1,
+            "description": "How many times seen across sources"
+          },
+          "existing_solutions": {
+            "type": "array",
+            "items": { "type": "string" },
+            "description": "Known existing tools/solutions"
+          },
+          "gap": {
+            "type": "string",
+            "description": "What's missing from existing solutions"
+          },
+          "severity": {
+            "type": "string",
+            "enum": ["low", "medium", "high", "critical"]
+          },
+          "buildability": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 10,
+            "description": "How feasible to build an MVP (1-10)"
+          }
+        }
+      }
+    },
+    "tech_shifts": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["shift", "direction", "implication"],
+        "properties": {
+          "shift": {
+            "type": "string",
+            "description": "Technology or pattern shift observed"
+          },
+          "direction": {
+            "type": "string",
+            "enum": ["emerging", "growing", "mainstream", "declining"]
+          },
+          "implication": {
+            "type": "string",
+            "description": "What this means for The Foundry's build targets"
+          },
+          "timeframe": {
+            "type": "string",
+            "description": "Expected timeframe (weeks, months, quarters)"
+          },
+          "evidence_count": {
+            "type": "integer",
+            "minimum": 1
+          }
+        }
+      }
+    },
+    "recommended_categories": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["category", "rationale", "priority"],
+        "properties": {
+          "category": {
+            "type": "string",
+            "description": "Category to prioritize in upcoming builds"
+          },
+          "rationale": {
+            "type": "string",
+            "description": "Why this category is recommended"
+          },
+          "priority": {
+            "type": "string",
+            "enum": ["low", "medium", "high"]
+          },
+          "example_ideas": {
+            "type": "array",
+            "items": { "type": "string" },
+            "description": "2-3 concrete build ideas in this category"
+          }
+        }
+      }
+    }
+  }
+}

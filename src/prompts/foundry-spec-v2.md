@@ -25,6 +25,25 @@ Replace `YYYY-MM-DD` with today's date.
 
 Read `trends-summary.json`. Sort by `final_score` descending. Take the **top 5** trends for evaluation.
 
+### Step 1.5: Check Latest Forecast
+
+Check for the latest forecast file in `~/.openclaw/workspace/foundry/forecasts/`:
+
+```bash
+ls -1t ~/.openclaw/workspace/foundry/forecasts/forecast-*.json 2>/dev/null | head -1
+```
+
+If a forecast exists and is recent (generated within the last 4 days):
+
+1. Read the forecast file
+2. Extract `emerging_themes` and `pain_point_tracker`
+3. When evaluating trends in Step 3, **boost priority** for trends that match:
+   - An emerging theme (especially with high confidence)
+   - A tracked pain point (especially with high severity/buildability)
+4. Note the forecast reference in your reasoning
+
+If no forecast exists or it's too old (>4 days): proceed normally without forecast boost.
+
 ### Step 2: Check for Duplicates ✨ UPDATED in v2
 
 **The Trend Scout (v3) already checked history and marked duplicates.**
@@ -84,7 +103,8 @@ For each of the top 5 trends (prioritizing non-duplicates), evaluate against ALL
 - At least one trend passes ALL hard requirements
 - AND scores well on soft evaluation (avg ≥ 3/5 across soft criteria)
 - Select the trend with the highest combined score
-- If two trends are close, prefer: **rising status** > not duplicate > higher engagement > clearer scope > more novel
+- If two trends are close, prefer: **forecast match** > **rising status** > not duplicate > higher engagement > clearer scope > more novel
+- When a trend matches a forecast emerging theme or pain point, give it a meaningful boost — this signals a validated, recurring need
 
 **REJECT ALL** if:
 - No trend passes all hard requirements
@@ -110,6 +130,12 @@ Write output to: `~/.openclaw/workspace/foundry/YYYY-MM-DD/spec.json`
   "duplicate_check": {
     "was_flagged": false,
     "reason_approved_anyway": null
+  },
+  "forecast_referenced": true,
+  "forecast_match": {
+    "theme": "Name of matching emerging theme (if any)",
+    "pain_point": "Name of matching pain point (if any)",
+    "boost_applied": true
   },
   "reasoning": "2-3 sentences: why this trend was selected over the others (mention lifecycle if relevant)",
   "rejected_alternatives": [
@@ -173,6 +199,7 @@ Write output to: `~/.openclaw/workspace/foundry/YYYY-MM-DD/spec.json`
       "title": "...",
       "buildability_score": 7,
       "previously_built": false,
+      "forecast_referenced": false,
       "rejection_reason": "Specific, actionable reason"
     }
   ],
@@ -223,5 +250,5 @@ Use these as templates (customize for each trend):
 
 ---
 
-**Status:** v2 — Implements Epic 2.1 (uses Trend Scout v3 dedup flags)
-**Last Updated:** 2026-02-26
+**Status:** v2 — Implements Epic 2.1 (uses Trend Scout v3 dedup flags) + Epic 2.4 (forecast-aware evaluation)
+**Last Updated:** 2026-03-05

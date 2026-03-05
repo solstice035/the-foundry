@@ -1,8 +1,8 @@
 # The Foundry - Master Status Document
 
-**Last Updated:** 2026-02-26  
-**Overall Status:** Phase 2 In Progress (6 epics building in parallel)  
-**Completion:** 5/16 epics complete (31%)
+**Last Updated:** 2026-03-05
+**Overall Status:** Phase 2 COMPLETE (6/6 epics), Phase 3 ready
+**Completion:** 11/16 epics complete (69%)
 
 ---
 
@@ -23,13 +23,13 @@
 - First test build: pdf-privacy-tools (SUCCESS, 7m 20s, $0.47)
 - Cron enabled 2026-02-19, running nightly
 
-**Phase 2:** 🏗️ IN PROGRESS (0/6 epics, 5 building in parallel)
-- Epic 2.1: Deduplication & History ⏳ Building
-- Epic 2.2: Metrics & Portfolio ⏳ Building
-- Epic 2.3: Lifecycle Tracking ⏳ Building
-- Epic 2.4: Deep Forecasting ⏳ Building
-- Epic 2.5: Consensus Analyst ⏸️ Pending (blocked by spawn limit)
-- Epic 2.6: GitHub Engagement ⏳ Building
+**Phase 2:** ✅ COMPLETE (6/6 epics)
+- Epic 2.1: Deduplication & History ✅ Complete (dedup.py, history.json, weekly cleanup with --deep)
+- Epic 2.2: Metrics & Portfolio ✅ Complete (metrics.jsonl, aggregate_metrics.py, portfolio-curator cron fixed)
+- Epic 2.3: Lifecycle Tracking ✅ Complete (trend-researcher Mode A, lifecycle fields, momentum scoring)
+- Epic 2.4: Deep Forecasting ✅ Complete (Mode B prompt, forecast schema, Spec Writer integration, 2x/week cron)
+- Epic 2.5: Consensus Analyst ✅ Complete (consensus-analyst prompt, auto-trigger from engagement check)
+- Epic 2.6: GitHub Engagement ✅ Complete (check_engagement.py, daily cron, briefing integration)
 
 **Phase 3:** 📋 PLANNED (0/5 epics, ready to execute)
 - Epic 3.1: Voice Guide & Manual Posting
@@ -77,43 +77,35 @@
 
 ---
 
-### Phase 2: Feedback Loop 🏗️
+### Phase 2: Feedback Loop ✅
 
-**Epic 2.1: Deduplication & History Tracking** ⏳
-- Agent: foundry-blacksmith (Opus 4)
-- Status: Building (started 2026-02-26)
-- Deliverables: history.json, dedup.py, weekly cleanup, updated prompts
-- Dependencies: None
+**Epic 2.1: Deduplication & History Tracking** ✅
+- Status: COMPLETE (2026-03-05)
+- Deliverables: history.json, dedup.py, cleanup_history.py with --deep flag, weekly cleanup cron (Sat 03:00)
+- Deep cleanup prunes: workspace date dirs >14d, trend-history >14d, forecasts >30d
 
-**Epic 2.2: Metrics & Portfolio Tracking** ⏳
-- Agent: foundry-blacksmith (Opus 4)
-- Status: Building (started 2026-02-26)
-- Deliverables: metrics.jsonl, portfolio-curator agent, weekly report
-- Dependencies: Epic 2.1 (needs history.json)
+**Epic 2.2: Metrics & Portfolio Tracking** ✅
+- Status: COMPLETE (2026-03-05)
+- Deliverables: metrics.jsonl, aggregate_metrics.py (schema-validated), portfolio-curator cron (fixed absolute paths)
+- CLI: `python3 aggregate_metrics.py --week-of YYYY-MM-DD`
 
-**Epic 2.3: Trend Lifecycle Tracking** ⏳
-- Agent: foundry-blacksmith (Opus 4)
-- Status: Building (started 2026-02-26)
-- Deliverables: trend-researcher agent, Mode A prompt, lifecycle fields
-- Dependencies: None (can simulate multi-day data)
+**Epic 2.3: Trend Lifecycle Tracking** ✅
+- Status: COMPLETE (2026-03-05)
+- Deliverables: trend-researcher Mode A prompt, lifecycle fields (status/trajectory/momentum_score), schema v2
 
-**Epic 2.4: Deep Trend Forecasting** ⏳
-- Agent: foundry-blacksmith (Opus 4)
-- Status: Building (started 2026-02-26)
-- Deliverables: Mode B prompt, forecast.json, GitHub/Reddit scraping
-- Dependencies: Epic 2.3 (needs Mode A operational)
+**Epic 2.4: Deep Trend Forecasting** ✅
+- Status: COMPLETE (2026-03-05)
+- Deliverables: Mode B prompt, forecast.schema.json, Spec Writer Step 1.5 (forecast boost), cron (Sun+Wed 20:00)
+- Output: `~/.openclaw/workspace/foundry/forecasts/forecast-YYYY-MM-DD.json`
 
-**Epic 2.5: Consensus Analyst** ⏸️
-- Status: PENDING (blocked by concurrent spawn limit)
-- Will spawn when Epic 2.1/2.3/2.6 completes
-- Deliverables: consensus-analyst agent, multi-perspective evaluation
-- Dependencies: Epic 2.2 (Portfolio Curator must exist)
+**Epic 2.5: Consensus Analyst** ✅
+- Status: COMPLETE (2026-03-05)
+- Deliverables: consensus-analyst-v1.md prompt, auto-trigger from check_engagement.py, --skip-consensus flag
+- Triggered when: 25+ stars AND 3+ days old, OR 2+ external issues
 
-**Epic 2.6: GitHub Engagement Monitoring** ⏳
-- Agent: foundry-blacksmith (Opus 4)
-- Status: Building (started 2026-02-26)
-- Deliverables: engagement check script, daily cron, briefing integration
-- Dependencies: None (pdf-privacy-tools repo exists)
+**Epic 2.6: GitHub Engagement Monitoring** ✅
+- Status: COMPLETE (2026-03-05)
+- Deliverables: check_engagement.py, daily cron (12:00), briefing integration (step 4b), engagement in briefing JSON
 
 ---
 
@@ -153,18 +145,16 @@
 
 ## Agent Swarm Status
 
-**Active Builds (5/5 - at limit):**
-1. P2-2.1-Dedup (Opus 4, started 2026-02-26)
-2. P2-2.3-Lifecycle (Opus 4, started 2026-02-26)
-3. P2-2.6-Engagement (Opus 4, started 2026-02-26)
-4. P2-2.2-Metrics (Opus 4, started 2026-02-26)
-5. P2-2.4-Forecasting (Opus 4, started 2026-02-26)
+**Active Builds:** None (Phase 2 complete)
 
-**Queued:**
-- P2-2.5-Consensus (will spawn when slot opens)
+**Completed (Phase 2):**
 
-**Completed:**
-- (none yet - first builds in progress)
+1. P2-2.1-Dedup (completed 2026-03-05)
+2. P2-2.2-Metrics (completed 2026-03-05)
+3. P2-2.3-Lifecycle (completed 2026-03-05)
+4. P2-2.4-Forecasting (completed 2026-03-05)
+5. P2-2.5-Consensus (completed 2026-03-05)
+6. P2-2.6-Engagement (completed 2026-03-05)
 
 ---
 
@@ -197,8 +187,8 @@
 
 **Phase 2:**
 - Started: 2026-02-26
-- In progress: 5 epics building in parallel
-- Estimated completion: 2026-02-28 (2-3 days)
+- Completed: 2026-03-05
+- All 6 epics delivered
 
 **Phase 3:**
 - Estimated start: 2026-03-01
@@ -297,9 +287,7 @@
 - X/Twitter auth deferred (bird CLI needs cookies)
 - **Mitigation:** Graceful degradation working (2/3 sources sufficient)
 
-**Phase 2:**
-- Concurrent spawn limit (5/5) blocking Epic 2.5
-- **Mitigation:** Will spawn when Wave 1 completes
+**Phase 2:** (no known issues — all epics complete)
 
 **Phase 3:**
 - Manual posting phase requires Nick's time commitment
@@ -309,15 +297,13 @@
 
 ## Next Actions
 
-**Immediate (Phase 2 in progress):**
-1. Monitor agent swarm completion
-2. Spawn Epic 2.5 when slot opens
-3. Review completed epic deliverables
-4. Run integration tests
-5. Git commits per epic
+**Immediate (Phase 2 complete):**
+1. Git commit all Phase 2 deliverables
+2. Run full test suite to confirm no regressions
+3. Verify cron jobs execute successfully (engagement, forecast, cleanup)
 
-**Short-term (after Phase 2):**
-1. Spawn Phase 3 Wave 1 (Epic 3.1)
+**Short-term (Phase 3 start):**
+1. Spawn Phase 3 Wave 1 (Epic 3.1: Voice Guide)
 2. Nick manual posting phase (2-3 weeks)
 3. Build War Room Content Queue View
 
@@ -374,5 +360,5 @@
 **Project Owner:** Nick Solly  
 **Lead Agent:** Jeeves 🫖  
 **Build Agents:** The Blacksmith 🏭 (Opus 4, spawning sub-agents)  
-**Status:** ON TRACK ✅  
-**Next Milestone:** Phase 2 completion (2026-02-28)
+**Status:** ON TRACK ✅
+**Next Milestone:** Phase 3 start (Epic 3.1: Voice Guide & Manual Posting)

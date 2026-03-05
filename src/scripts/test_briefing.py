@@ -9,7 +9,6 @@ Test briefing compilation for all three paths:
 import json
 import os
 import sys
-from datetime import datetime, timezone
 
 WORKSPACE = os.path.expanduser("~/.openclaw/workspace/foundry")
 DATE = "2026-02-18"
@@ -73,9 +72,9 @@ def compile_success_briefing(trends, spec, build):
 
 ✅ BUILD SUCCESSFUL
 
-📦 Project: {build.get('project_name', project.get('project_name', 'unknown'))}
+📦 Project: {build.get("project_name", project.get("project_name", "unknown"))}
 📈 Trend: "{trend_title}" (score {trend_score}/10, {trend_source})
-🔧 Stack: {' + '.join(stack_parts)}
+🔧 Stack: {" + ".join(stack_parts)}
 
 Features:
 {feature_lines}
@@ -111,7 +110,10 @@ Total: {total_duration}"""
         "stage_timings": {
             "scout": {"duration_seconds": 82, "status": "complete"},
             "spec": {"duration_seconds": 76, "status": "complete"},
-            "builder": {"duration_seconds": build.get("build_duration_seconds", 0), "status": "complete"},
+            "builder": {
+                "duration_seconds": build.get("build_duration_seconds", 0),
+                "status": "complete",
+            },
         },
         "summary_text": briefing_text,
     }
@@ -131,7 +133,10 @@ def compile_rejection_briefing(trends, spec):
         reason = r.get("rejection_reason", r.get("reason", "Unknown"))
         rejection_lines.append(f"{i}. {title} — {reason}")
 
-    reasoning = spec.get("rejection_summary", spec.get("reasoning", "No trends met buildability threshold."))
+    reasoning = spec.get(
+        "rejection_summary",
+        spec.get("reasoning", "No trends met buildability threshold."),
+    )
 
     briefing_text = f"""🏭 The Foundry — Morning Briefing
 📅 {DATE}
@@ -157,10 +162,16 @@ Pipeline: Scout (1m 22s) → Spec (1m 16s) → Rejected"""
         "rejection": {
             "trends_evaluated": spec.get("trends_reviewed", len(rejections)),
             "top_rejections": [
-                {"title": r.get("title"), "reason": r.get("rejection_reason", r.get("reason"))}
+                {
+                    "title": r.get("title"),
+                    "reason": r.get("rejection_reason", r.get("reason")),
+                }
                 for r in rejections[:5]
             ],
-            "recommendation": spec.get("what_would_work", "Tomorrow's scan should prioritize web apps, CLIs, or APIs."),
+            "recommendation": spec.get(
+                "what_would_work",
+                "Tomorrow's scan should prioritize web apps, CLIs, or APIs.",
+            ),
         },
         "stage_timings": {
             "scout": {"duration_seconds": 82, "status": "complete"},
@@ -192,7 +203,7 @@ def compile_failure_briefing(trends, spec, build):
 
 ❌ BUILD FAILED
 
-📦 Project: {build.get('project_name', project.get('project_name', 'unknown'))}
+📦 Project: {build.get("project_name", project.get("project_name", "unknown"))}
 📈 Trend: "{trend_title}" (score {trend_score}/10)
 
 Failure Stage: Builder
@@ -276,9 +287,18 @@ def test_rejection_path():
         "rejection_summary": "No trends met buildability threshold ≥7 with clear MVP scope.",
         "what_would_work": "Tomorrow's scan should prioritize web apps, CLIs, or APIs with specific pain points.",
         "rejected_alternatives": [
-            {"title": "AsteroidOS 2.0", "rejection_reason": "Hardware/firmware OS (unbuildable overnight)"},
-            {"title": "Free alternative to Wispr Flow", "rejection_reason": "Already exists as open-source (no value)"},
-            {"title": "BarraCUDA compiler", "rejection_reason": "GPU toolchain (too complex, score 6/10)"},
+            {
+                "title": "AsteroidOS 2.0",
+                "rejection_reason": "Hardware/firmware OS (unbuildable overnight)",
+            },
+            {
+                "title": "Free alternative to Wispr Flow",
+                "rejection_reason": "Already exists as open-source (no value)",
+            },
+            {
+                "title": "BarraCUDA compiler",
+                "rejection_reason": "GPU toolchain (too complex, score 6/10)",
+            },
         ],
     }
 

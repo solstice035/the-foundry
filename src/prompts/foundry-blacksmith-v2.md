@@ -123,6 +123,10 @@ Read all available output files and compile the briefing.
 2. Read `spec.json` (if exists)
 3. Read `build.json` (if exists)
 4. Read `state.json` for timing and status data
+4b. **Load engagement data:** Read yesterday's engagement check results from `~/.openclaw/workspace/foundry/YYYY-MM-DD/engagement.json` (yesterday's date, since the engagement check runs at noon and the briefing compiles early morning).
+    - Use `~/projects/the-foundry/src/utils_engagement.py` function `format_engagement_summary()` conceptually (the agent should read the file and format it)
+    - Include engagement summary in the briefing BEFORE the Pipeline section
+    - If no data exists: add line "Engagement: No data (engagement check not yet run today)"
 5. Determine briefing type: **success**, **rejection**, or **failure**
 6. Compile `briefing.json`
 7. Write to `~/.openclaw/workspace/foundry/YYYY-MM-DD/briefing.json`
@@ -217,6 +221,13 @@ Update state.json at every stage transition:
     "spec": {"duration_seconds": 76, "status": "complete"},
     "builder": {"duration_seconds": 440, "status": "complete"}
   },
+  "engagement": {
+    "total_repos": 0,
+    "total_stars": 0,
+    "high_engagement_repos": [],
+    "repos_needing_consensus": [],
+    "data_available": true
+  },
   "summary_text": "Full formatted briefing text (see templates below)"
 }
 ```
@@ -272,6 +283,11 @@ Build Stats:
 • Cost: ${cost_usd}
 • GitHub: {repo_url}
 
+Engagement:
+• Portfolio: {total_repos} repos, {total_stars} stars
+• High engagement: {high_engagement_repos or "none"}
+• Consensus needed: {repos_needing_consensus or "none"}
+
 Pipeline: Scout ({scout_duration}) → Researcher ({researcher_duration}) → Spec ({spec_duration}) → Builder ({build_duration})
 Total: {total_duration}
 ```
@@ -290,6 +306,11 @@ Top trends evaluated:
 {numbered list of rejections with reasons}
 
 Reasoning: {rejection_summary}
+
+Engagement:
+• Portfolio: {total_repos} repos, {total_stars} stars
+• High engagement: {high_engagement_repos or "none"}
+• Consensus needed: {repos_needing_consensus or "none"}
 
 Pipeline: Scout ({scout_duration}) → Researcher ({researcher_duration}) → Spec ({spec_duration}) → Rejected
 ```
@@ -313,6 +334,11 @@ Partial Progress:
 
 Local Path: {local_path}
 Status: {github_status}
+
+Engagement:
+• Portfolio: {total_repos} repos, {total_stars} stars
+• High engagement: {high_engagement_repos or "none"}
+• Consensus needed: {repos_needing_consensus or "none"}
 
 Next Steps: {recommendation}
 ```
