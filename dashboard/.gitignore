@@ -1,0 +1,4 @@
+# Override parent *.json ignore for dashboard config files
+!*.json
+node_modules/
+dist/
