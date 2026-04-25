@@ -56,7 +56,7 @@ def compile_success_briefing(trends, spec, build):
 
     build_duration = format_duration(build.get("build_duration_seconds", 0))
     files = build.get("files_created", 0)
-    cost = build.get("aider_cost_usd", 0)
+    cost = build.get("cost_usd", 0)  # was aider_cost_usd
     repo = build.get("repo_url", "N/A")
 
     # Estimate stage durations (for real pipeline, these come from state.json)
@@ -330,7 +330,7 @@ def test_failure_path():
         "date": DATE,
         "project_name": "pdf-privacy-tools",
         "status": "failed",
-        "error": "aider timed out after 5 hours",
+        "error": "claude-code-acp session timed out",
         "partial_progress": "Project structure created, dependencies installed, 8/10 features implemented, tests incomplete",
         "local_path": "~/projects/foundry/20260218-pdf-privacy-tools",
         "build_duration_seconds": 18000,

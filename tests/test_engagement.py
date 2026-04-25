@@ -30,21 +30,18 @@ def test_list_repos():
 
     repos = list_repos("jeevesbot-io", "foundry-")
 
-    if repos is None:
-        print("❌ FAIL: Failed to fetch repos")
-        return False
+    assert repos is not None, "Failed to fetch repos"
 
     print(f"Found {len(repos)} public foundry-* repos")
 
     if len(repos) == 0:
         print("⚠️  WARNING: No repos found (this is OK if none exist yet)")
-        return True
+        return
 
     for repo in repos[:5]:  # Show first 5
         print(f"  • {repo['name']} (created {repo.get('createdAt', 'unknown')})")
 
     print("✅ PASS: Repository listing works")
-    return True
 
 
 def test_get_repo_stats():
@@ -55,9 +52,7 @@ def test_get_repo_stats():
 
     stats = get_repo_stats("jeevesbot-io", "foundry-20260218-pdf-privacy-tools")
 
-    if stats is None:
-        print("❌ FAIL: Failed to fetch repo stats")
-        return False
+    assert stats is not None, "Failed to fetch repo stats"
 
     print(f"Repository: {stats['full_name']}")
     print(f"URL: {stats['url']}")
@@ -77,12 +72,9 @@ def test_get_repo_stats():
     # Validate schema
     required_fields = ["name", "full_name", "url", "created_at", "age_days", "stats"]
     for field in required_fields:
-        if field not in stats:
-            print(f"❌ FAIL: Missing required field: {field}")
-            return False
+        assert field in stats, f"Missing required field: {field}"
 
     print("\n✅ PASS: Stats fetched and validated")
-    return True
 
 
 def test_threshold_detection():
@@ -103,16 +95,14 @@ def test_threshold_detection():
         f"  Consensus eligible: {thresholds1['eligible_for_consensus']} (expected False)"
     )
 
-    if any(
+    assert not any(
         [
             thresholds1["crossed_25_stars"],
             thresholds1["crossed_50_stars"],
             thresholds1["has_external_issues"],
             thresholds1["eligible_for_consensus"],
         ]
-    ):
-        print("❌ FAIL: Low engagement case triggered thresholds")
-        return False
+    ), "Low engagement case triggered thresholds"
 
     # Test case 2: Exactly at 25 stars, 3 days old
     stats2 = {"stars": 25, "external_issues": 1}
@@ -126,12 +116,8 @@ def test_threshold_detection():
         f"  Consensus eligible: {thresholds2['eligible_for_consensus']} (expected True)"
     )
 
-    if not thresholds2["crossed_25_stars"]:
-        print("❌ FAIL: 25 stars threshold not triggered")
-        return False
-    if not thresholds2["eligible_for_consensus"]:
-        print("❌ FAIL: Consensus threshold not triggered")
-        return False
+    assert thresholds2["crossed_25_stars"], "25 stars threshold not triggered"
+    assert thresholds2["eligible_for_consensus"], "Consensus threshold not triggered"
 
     # Test case 3: High engagement
     stats3 = {"stars": 60, "external_issues": 3}
@@ -145,16 +131,14 @@ def test_threshold_detection():
         f"  Consensus eligible: {thresholds3['eligible_for_consensus']} (expected True)"
     )
 
-    if not all(
+    assert all(
         [
             thresholds3["crossed_25_stars"],
             thresholds3["crossed_50_stars"],
             thresholds3["has_external_issues"],
             thresholds3["eligible_for_consensus"],
         ]
-    ):
-        print("❌ FAIL: High engagement case didn't trigger all thresholds")
-        return False
+    ), "High engagement case didn't trigger all thresholds"
 
     # Test case 4: Too young for consensus
     stats4 = {"stars": 30, "external_issues": 0}
@@ -166,12 +150,11 @@ def test_threshold_detection():
         f"  Consensus eligible: {thresholds4['eligible_for_consensus']} (expected False)"
     )
 
-    if thresholds4["eligible_for_consensus"]:
-        print("❌ FAIL: Consensus triggered for repo younger than 3 days")
-        return False
+    assert not thresholds4["eligible_for_consensus"], (
+        "Consensus triggered for repo younger than 3 days"
+    )
 
     print("\n✅ PASS: All threshold cases validated")
-    return True
 
 
 def test_growth_calculation():
@@ -197,9 +180,7 @@ def test_growth_calculation():
         current_stats, previous_data, "foundry-20260218-pdf-privacy-tools"
     )
 
-    if growth is None:
-        print("❌ FAIL: Growth calculation returned None")
-        return False
+    assert growth is not None, "Growth calculation returned None"
 
     print(f"Current stats: {current_stats}")
     print(f"Previous stats: {previous_data['repos'][0]['stats']}")
@@ -208,26 +189,17 @@ def test_growth_calculation():
     print(f"  Forks: +{growth['forks_delta']} (expected +1)")
     print(f"  Issues: +{growth['issues_delta']} (expected +1)")
 
-    if growth["stars_delta"] != 5:
-        print("❌ FAIL: Stars delta incorrect")
-        return False
-    if growth["forks_delta"] != 1:
-        print("❌ FAIL: Forks delta incorrect")
-        return False
-    if growth["issues_delta"] != 1:
-        print("❌ FAIL: Issues delta incorrect")
-        return False
+    assert growth["stars_delta"] == 5, "Stars delta incorrect"
+    assert growth["forks_delta"] == 1, "Forks delta incorrect"
+    assert growth["issues_delta"] == 1, "Issues delta incorrect"
 
     # Test with no previous data
     growth_none = calculate_growth(
         current_stats, None, "foundry-20260218-pdf-privacy-tools"
     )
-    if growth_none is not None:
-        print("❌ FAIL: Growth with no previous data should return None")
-        return False
+    assert growth_none is None, "Growth with no previous data should return None"
 
     print("\n✅ PASS: Growth calculation validated")
-    return True
 
 
 def test_action_items():
@@ -289,17 +261,14 @@ def test_action_items():
     print(f"  Medium: {len(medium_priority)}")
     print(f"  Low: {len([a for a in action_items if a['priority'] == 'low'])}")
 
-    if len(high_priority) == 0:
-        print("❌ FAIL: No high-priority action items for high-engagement repo")
-        return False
+    assert len(high_priority) > 0, (
+        "No high-priority action items for high-engagement repo"
+    )
 
     consensus_actions = [a for a in action_items if "Consensus Analyst" in a["action"]]
-    if len(consensus_actions) == 0:
-        print("❌ FAIL: No Consensus Analyst trigger action item")
-        return False
+    assert len(consensus_actions) > 0, "No Consensus Analyst trigger action item"
 
     print("\n✅ PASS: Action items generated correctly")
-    return True
 
 
 def test_full_integration():
@@ -317,11 +286,10 @@ def test_full_integration():
         timeout=120,
     )
 
-    if result.returncode != 0:
-        print(f"❌ FAIL: Script exited with code {result.returncode}")
-        print(f"STDOUT:\n{result.stdout}")
-        print(f"STDERR:\n{result.stderr}")
-        return False
+    assert result.returncode == 0, (
+        f"Script exited with code {result.returncode}\n"
+        f"STDOUT:\n{result.stdout}\nSTDERR:\n{result.stderr}"
+    )
 
     print("Script output:")
     print(result.stdout)
@@ -336,11 +304,9 @@ def test_full_integration():
         print("\n⚠️  No public repos found - this is OK for testing")
         print("   When public repos exist, they will be tracked")
         print("\n✅ PASS: Script handles no-repos case correctly")
-        return True
+        return
 
-    if not os.path.exists(output_path):
-        print(f"❌ FAIL: Output file not created at {output_path}")
-        return False
+    assert os.path.exists(output_path), f"Output file not created at {output_path}"
 
     # Validate output schema
     with open(output_path) as f:
@@ -348,13 +314,11 @@ def test_full_integration():
 
     required_fields = ["schema_version", "date", "checked_at", "repos", "summary"]
     for field in required_fields:
-        if field not in data:
-            print(f"❌ FAIL: Missing required field in output: {field}")
-            return False
+        assert field in data, f"Missing required field in output: {field}"
 
-    if data["schema_version"] != 1:
-        print(f"❌ FAIL: Wrong schema version: {data['schema_version']}")
-        return False
+    assert data["schema_version"] == 1, (
+        f"Wrong schema version: {data['schema_version']}"
+    )
 
     print("\n✅ Output file created and validated")
     print(f"   Path: {output_path}")
@@ -362,19 +326,27 @@ def test_full_integration():
     print(f"   Total stars: {data['summary']['total_stars']}")
 
     print("\n✅ PASS: Full integration test completed")
-    return True
 
 
 def main():
     """Run all tests."""
-    results = []
+    tests = [
+        ("List repos", test_list_repos),
+        ("Get repo stats", test_get_repo_stats),
+        ("Threshold detection", test_threshold_detection),
+        ("Growth calculation", test_growth_calculation),
+        ("Action items", test_action_items),
+        ("Full integration", test_full_integration),
+    ]
 
-    results.append(("List repos", test_list_repos()))
-    results.append(("Get repo stats", test_get_repo_stats()))
-    results.append(("Threshold detection", test_threshold_detection()))
-    results.append(("Growth calculation", test_growth_calculation()))
-    results.append(("Action items", test_action_items()))
-    results.append(("Full integration", test_full_integration()))
+    results: list[tuple[str, bool]] = []
+    for name, test_fn in tests:
+        try:
+            test_fn()
+            results.append((name, True))
+        except AssertionError as e:
+            print(f"❌ FAIL: {e}")
+            results.append((name, False))
 
     print("\n" + "=" * 60)
     print("TEST SUMMARY")

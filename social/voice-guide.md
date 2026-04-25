@@ -1,7 +1,7 @@
 # Nick's Voice Guide
 
-**Version:** 1.0  
-**Last Updated:** 2026-02-26  
+**Version:** 1.1
+**Last Updated:** 2026-03-05
 **Canonical Source:** Cross-referenced with `SOUL.md` in workspace-foundry-blacksmith
 
 ---
@@ -87,8 +87,12 @@ Drawn from `SOUL.md`:
 
 ### ✅ GOOD Examples (Nick's Voice)
 
-**Build Announcement:**
-> "Saw devs complaining about X. Built a thing."
+**Build Announcement (Real — deptox, 2026-03-04):**
+> "Saw devs on Reddit worried about AI-hallucinated npm packages in their lockfiles. Pipeline spotted it, built deptox overnight — scans node_modules for phantom dependencies that don't exist on the registry.
+>
+> Repo: https://github.com/jeevesbot-io/foundry-20260304-deptox
+>
+> 22 tests. 3664 lines. $0.55 in API costs."
 
 **Rejection Post:**
 > "My AI build pipeline analyzed 14 trending topics last night and decided none of them were worth building.
@@ -96,6 +100,8 @@ Drawn from `SOUL.md`:
 > Top reject: crypto portfolio tracker (saturated, no differentiator)
 > 
 > Sometimes the best build is no build."
+
+_Based on real pipeline behavior — the Spec Writer has rejected trends including saturated categories and builds with no clear differentiator._
 
 **Process Thread:**
 > "14 trends scanned, zero worth building. Here's why."
@@ -109,6 +115,11 @@ Drawn from `SOUL.md`:
 > Lesson: should have scoped to single-user first.
 >
 > Not every night produces a win. That's the point of automation—cheap experiments."
+
+**Failure (Real — 2026-02-23):**
+> "Pipeline failed last night. Scout ran for 60 seconds and found nothing worth scanning. No spec. No build. Just silence.
+>
+> Some nights the internet isn't angry enough. Back at it tonight."
 
 ### ❌ BAD Examples (Not Nick's Voice)
 
@@ -317,15 +328,17 @@ What didn't land? Too vague? Too formal? Wrong platform?
 
 ### Learned Patterns (To Be Updated Over Time)
 
-_This section will be populated as Nick approves/rejects content and patterns emerge._
-
-**Initial observations:**
-- Rejection posts likely to get 2x engagement vs build announcements (hypothesis)
-- Concrete numbers in first tweet should increase impressions (hypothesis)
-- Posts referencing specific tools by name should outperform generic descriptions (hypothesis)
+**Initial observations (from 12 pipeline runs, 2026-02-18 to 2026-03-05):**
+- 11/12 nights produced successful builds (91.7% success rate)
+- Average build cost: $0.41 (range $0.00-$0.58)
+- Average total pipeline duration: ~13 minutes
+- 10 consecutive successes since 2026-02-26
+- CLI tools dominate: 8 of 11 builds were CLI category
+- Security-themed tools had highest engagement scores (ai-code-guard: 244.0, deptox: 120.9)
+- Reddit is primary signal source (8 of 11 builds sourced from Reddit)
 
 **Nick's corrections will appear here:**
-- [To be updated with real feedback]
+- [To be updated with real feedback from manual posting phase]
 
 ---
 
@@ -392,6 +405,11 @@ If any answer is "no," revise.
 - Defined 6 content types
 - Established platform rules
 - Created testing checklist
+
+**v1.1 (2026-03-05):**
+- Updated examples with real build data (deptox, 2026-02-23 failure)
+- Seeded "Learned Patterns" with 12-run pipeline statistics
+- Added real failure post example
 
 **Future updates will track:**
 - Nick's consistent edits/corrections

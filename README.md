@@ -11,7 +11,7 @@
 The Foundry is an autonomous multi-agent system that:
 1. Scans trending developer pain points on X, Reddit, and Hacker News
 2. Selects one buildable trend per night
-3. Builds an MVP while you sleep (using aider + LLM)
+3. Builds an MVP while you sleep (using Claude Code via ACP — free)
 4. Pushes to GitHub and delivers a morning briefing
 
 **Cost:** ~$40-55/month  
@@ -24,7 +24,7 @@ The Foundry is an autonomous multi-agent system that:
 
 **Multi-agent pipeline:**
 ```
-Trend Scout (Haiku) → Spec Writer (Sonnet) → Builder (Sonnet + aider)
+Trend Scout (Haiku) → Spec Writer (Sonnet) → Builder (Claude Code via ACP)
                 ↓
         Morning Briefing (08:00)
 ```

@@ -44,8 +44,13 @@ foundry/
 │   ├── spec.json            Spec Writer output
 │   ├── build.json           Builder output
 │   └── state.json           Coordinator tracking
-├── history.json             Past builds & rejections (read this!)
-└── metrics.jsonl            Nightly performance log
+├── history.json             Past builds & rejections (7-day cleanup)
+├── metrics.jsonl            Nightly performance log
+├── trend-history/           Multi-day trend tracking (14-day retention)
+├── forecasts/               Deep trend forecasts (30-day retention)
+│   └── forecast-YYYY-MM-DD.json
+└── analysis/                Consensus Analyst outputs
+    └── YYYYMMDD-{project}-consensus.json
 ```
 
 **Project code:** `~/projects/the-foundry/`
@@ -239,14 +244,17 @@ If you're approaching timeout:
 - Add lifecycle data (rising/peaked, appearances, trajectory)
 - Output enriched `trends-summary.json`
 
-**Mode B (twice weekly, standalone):**
+**Mode B (twice weekly, standalone — Sunday + Wednesday 20:00):**
 - Scan GitHub trending repos
 - Track pain points across Reddit (multi-week)
 - Monitor tech shifts (new APIs, frameworks)
-- Generate forecast (emerging themes, opportunities)
-- Output `research/YYYY-WXX-forecast.json`
+- Generate forecast (emerging themes, pain point tracker, tech shifts)
+- Output `~/.openclaw/workspace/foundry/forecasts/forecast-YYYY-MM-DD.json`
+- Schema: `config/schemas/forecast.schema.json`
 
 **Read before running:**
+- Mode A: `src/prompts/trend-researcher-mode-a-v1.md`
+- Mode B: `src/prompts/trend-researcher-mode-b-v1.md`
 - `docs/Post build review.md` (Trend Researcher section)
 
 ---
@@ -288,7 +296,7 @@ If you're approaching timeout:
 
 **Critical:** The Critic MUST criticize, the Investor MUST apply investment thinking. If all perspectives agree, you're doing it wrong.
 
-**Triggered when:** Build crosses engagement threshold (25+ stars + 3 days old)
+**Triggered when:** Auto-triggered by `check_engagement.py` when a repo has 25+ stars AND is 3+ days old, OR has 2+ external issues. Skips if consensus already exists at `~/.openclaw/workspace/foundry/analysis/YYYYMMDD-{repo}-consensus.json`.
 
 ---
 
@@ -508,5 +516,5 @@ Write a minimal output file with error details:
 
 **You are part of a system. Do your part well.**
 
-**Last Updated:** 2026-02-18  
-**Project Status:** Design complete, awaiting implementation
+**Last Updated:** 2026-03-05
+**Project Status:** Phase 1 & 2 complete, Phase 3 planned

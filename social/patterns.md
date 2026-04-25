@@ -1,7 +1,7 @@
 # Social Media Patterns - What Works & What Doesn't
 
-**Version:** 1.0  
-**Last Updated:** 2026-02-26  
+**Version:** 1.1
+**Last Updated:** 2026-03-05  
 **Purpose:** Document learned patterns from manual posting to inform Content Drafter automation  
 **Status:** Living document (updated weekly during testing, monthly after automation)
 
@@ -36,6 +36,27 @@ This document captures patterns discovered through manual posting and engagement
 ### What Works
 
 _This section will be populated during manual testing phase based on engagement data_
+
+**Baseline Observations (from 12 pipeline runs, pre-posting):**
+
+These aren't validated engagement patterns yet — they're quantitative observations from the build pipeline that can inform content strategy. They'll be validated once actual posts go live.
+
+| Metric | Value | Content Angle |
+|--------|-------|---------------|
+| Build success rate | 91.7% (11/12) | Reliability narrative |
+| Average build cost | $0.41 (range $0.00-$0.58) | "Less than a coffee" |
+| Average pipeline duration | ~13 min | "While you make coffee" |
+| Consecutive successes | 10 (since 02-26) | Streak narrative |
+| Category breakdown | 8 CLI, 1 web, 1 API, 2 dev-tools | Terminal-native audience |
+| Source breakdown | 8 Reddit, 2 HN, 2 X | Reddit as primary signal |
+| Top engagement builds | ai-code-guard (244.0), deptox (120.9), reddit-keyword-monitor (85.0) | Security tools resonate |
+
+**Observations worth testing as content:**
+1. Security-themed tools (ai-code-guard, deptox, vibe-check, ai-deploy-guard) consistently score highest engagement — security angle may resonate with dev audience
+2. CLI category dominates — "terminal-native" positioning aligns with audience
+3. Build costs are concrete and shareable ($0.34-$0.57 per build)
+4. The 10-night streak itself is a story ("10 consecutive overnight builds, zero failures")
+5. Reddit is overwhelmingly the best signal source — worth mentioning in process threads
 
 **Initial Hypotheses (to be validated):**
 
@@ -644,17 +665,17 @@ A pattern is "successful" if it:
 
 _This section will be populated as patterns are validated. It serves as a quick lookup for Content Drafter._
 
-### Top 5 Validated "Do This" Patterns
+### Top 5 Pre-Validation Observations (Content Angles)
 
-1. _To be determined_
-2. _To be determined_
-3. _To be determined_
-4. _To be determined_
-5. _To be determined_
+1. Security tools get highest engagement scores (244.0, 120.9, 82.3)
+2. Build cost <$0.60 is concrete, shareable, and counterintuitive
+3. CLI-heavy output matches dev Twitter audience preferences
+4. 10-night success streak has narrative power
+5. Reddit as signal source creates a meta-loop worth discussing
 
 ### Top 5 Validated "Avoid This" Patterns
 
-1. _To be determined_
+1. _To be determined after manual posting_
 2. _To be determined_
 3. _To be determined_
 4. _To be determined_
@@ -663,6 +684,11 @@ _This section will be populated as patterns are validated. It serves as a quick 
 ---
 
 ## Update Log
+
+**v1.1 (2026-03-05):**
+- Added baseline observations from 12 pipeline runs
+- Seeded quantitative data for content strategy
+- Updated Quick Reference with pre-validation observations
 
 **v1.0 (2026-02-26):**
 - Initial patterns document created

@@ -13,7 +13,7 @@
   "properties": {
     "schema_version": {
       "type": "integer",
-      "const": 1
+      "enum": [1, 2]
     },
     "status": {
       "type": "string",
@@ -33,13 +33,19 @@
       "minimum": 0,
       "description": "Total build time in seconds"
     },
-    "aider_invocation": {
+    "build_tool": {
+      "type": "string",
+      "enum": ["claude-code-acp", "aider"],
+      "description": "Tool used to build the project. Use claude-code-acp for all new builds."
+    },
+    "claude_code_session": {
       "type": "object",
+      "description": "ACP session details (v2+ builds)",
       "properties": {
         "started_at": {"type": "string", "format": "date-time"},
         "completed_at": {"type": "string", "format": "date-time"},
-        "exit_code": {"type": "integer"},
-        "timeout_triggered": {"type": "boolean"}
+        "session_id": {"type": "string"},
+        "cost_usd": {"type": "number", "const": 0}
       }
     },
     "repo_url": {

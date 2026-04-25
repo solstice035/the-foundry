@@ -1,0 +1,137 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://jeevesbot.io/schemas/foundry/content-history.json",
+  "title": "Content History Schema",
+  "description": "Tracks content approvals, edits, rejections, and performance for voice learning",
+  "type": "object",
+  "required": ["schema_version", "entries"],
+  "properties": {
+    "schema_version": {
+      "type": "integer",
+      "const": 1,
+      "description": "Schema version for compatibility"
+    },
+    "last_updated": {
+      "type": "string",
+      "format": "date-time",
+      "description": "ISO 8601 timestamp of last update"
+    },
+    "entries": {
+      "type": "array",
+      "description": "History of content draft actions",
+      "items": {
+        "$ref": "#/definitions/historyEntry"
+      }
+    },
+    "learned_patterns": {
+      "$ref": "#/definitions/learnedPatterns"
+    }
+  },
+  "definitions": {
+    "historyEntry": {
+      "type": "object",
+      "required": ["id", "date", "type", "platform", "action"],
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^draft-\\d{8}-\\d{3}$",
+          "description": "Draft ID matching content-queue.json"
+        },
+        "date": {
+          "type": "string",
+          "format": "date",
+          "description": "Date of action"
+        },
+        "type": {
+          "type": "string",
+          "enum": [
+            "build_announcement",
+            "process_thread",
+            "rejection_post",
+            "trend_forecast",
+            "consensus_take",
+            "failure_post"
+          ],
+          "description": "Content type"
+        },
+        "platform": {
+          "type": "string",
+          "enum": ["x", "reddit", "linkedin", "hackernews"],
+          "description": "Target platform"
+        },
+        "action": {
+          "type": "string",
+          "enum": ["approved", "approved_with_edits", "rejected"],
+          "description": "Nick's action on the draft"
+        },
+        "original_draft": {
+          "type": "string",
+          "description": "Original draft text as generated"
+        },
+        "nick_edits": {
+          "type": ["string", "null"],
+          "description": "Description of Nick's edits (if approved_with_edits)"
+        },
+        "nick_feedback": {
+          "type": ["string", "null"],
+          "description": "Nick's feedback on why he rejected or edited"
+        },
+        "final_version": {
+          "type": ["string", "null"],
+          "description": "Final posted version after edits"
+        },
+        "performance": {
+          "$ref": "#/definitions/performance"
+        }
+      }
+    },
+    "performance": {
+      "type": "object",
+      "description": "Post-publication engagement metrics",
+      "properties": {
+        "impressions": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "likes": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "retweets": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "comments": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "measured_at": {
+          "type": "string",
+          "format": "date-time",
+          "description": "When metrics were last collected"
+        }
+      }
+    },
+    "learnedPatterns": {
+      "type": "object",
+      "description": "Patterns learned from Nick's approvals and edits",
+      "properties": {
+        "high_performers": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "Observations about what gets high engagement"
+        },
+        "nick_corrections": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "Consistent edits Nick makes to drafts"
+        },
+        "anti_patterns": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "Patterns that consistently get rejected"
+        }
+      }
+    }
+  }
+}

@@ -1,128 +1,78 @@
 # The Foundry - Current Status
 
-**Last Updated:** 2026-02-18 20:45 GMT  
-**Phase:** 1 - Core Build Pipeline ✅ COMPLETE  
-**Progress:** 5/16 epics complete (31%)
+**Last Updated:** 2026-03-05
+**Phase:** Phase 2 complete, Phase 3 planned
+**Progress:** 11/16 epics complete (69%)
 
 ---
 
-## Phase 1: COMPLETE ✅
+## Phase 1: COMPLETE
 
-**Status:** All 5 epics delivered and validated  
-**Cron job:** ENABLED (first autonomous run tonight at 00:00)  
-**Test build:** pdf-privacy-tools (SUCCESS, 7m 20s, $0.47)  
+**Status:** All 5 epics delivered and validated
+**Cron job:** ENABLED (nightly 00:00)
+**Test build:** pdf-privacy-tools (SUCCESS, 7m 20s, $0.47)
 **Validation:** Independent review complete (see VALIDATION.md)
 
-**Next milestone:** 5 consecutive autonomous nights  
-**Timeline:** 2026-02-19 → 2026-02-23 (Phase 1 exit criteria)
+## Phase 2: COMPLETE
 
----
+**Status:** All 6 epics delivered (2026-03-05)
+**Deliverables:**
+- Epic 2.1: Deduplication & History (dedup.py, cleanup_history.py with --deep)
+- Epic 2.2: Metrics & Portfolio (metrics.jsonl, aggregate_metrics.py, portfolio-curator cron)
+- Epic 2.3: Lifecycle Tracking (trend-researcher Mode A, lifecycle/momentum fields)
+- Epic 2.4: Deep Forecasting (Mode B prompt, forecast.schema.json, Spec Writer integration)
+- Epic 2.5: Consensus Analyst (consensus-analyst-v1.md, auto-trigger from engagement check)
+- Epic 2.6: Engagement Monitoring (check_engagement.py, daily cron, briefing integration)
 
-## Phase 1 Epics (5 total) ✅ ALL COMPLETE
+**Cron jobs added:**
+- Daily engagement check (12:00)
+- Weekly deep cleanup (Saturday 03:00)
+- Deep trend forecast (Sunday + Wednesday 20:00)
 
-- ✅ **Epic 1.1:** Trend Scout - Data Collection (10/11 criteria, X auth deferred)
-- ✅ **Epic 1.2:** Trend Scout - Normalization & Scoring (8/8 criteria)
-- ✅ **Epic 1.3:** Spec Writer - Trend Selection (6/6 criteria, APPROVED build)
-- ✅ **Epic 1.4:** Builder - Aider Integration (10/10 criteria, FIRST BUILD SUCCESS!)
-- ✅ **Epic 1.5:** Coordination & Morning Briefing (7/7 criteria)
+## Phase 3: PLANNED
 
-**Phase 1 Exit Criteria (In Progress):**
-- [ ] 5 consecutive autonomous nights (0/5 - starts tonight)
-- [ ] At least 3 successful builds (1/3 - test build complete)
-- [ ] Morning briefing delivered reliably (0/5 - starts tonight)
+**Status:** Ready to execute (0/5 epics)
+**Epics:** Voice Guide, Content Drafter, Voice Learning, Engagement Monitoring, Visual Content
 
 ---
 
 ## Recent Activity
 
-**2026-02-18 20:45 GMT:**
-- ✅ **PHASE 1 COMPLETE** 🏭 All 5 epics delivered!
-- ✅ Independent validation: APPROVED FOR PRODUCTION
-- ✅ Cron job ENABLED (first run: tonight at 00:00)
-- 📊 End-to-end test: 9m 58s, $0.47, 100% success
-- 📋 Next: 5 consecutive nights (Phase 1 exit criteria)
+**2026-03-05:**
+- Phase 2 complete: all 6 epics delivered in single session (10 tasks, 3 subagent sessions)
+- 23 files changed, 4058 insertions, 1905 deletions
+- 89 tests passing, all pre-commit checks green
+- New files: aggregate_metrics.py, forecast.schema.json, trend-researcher-mode-b-v1.md, conftest.py
+- Updated: cleanup_history.py (--deep), check_engagement.py (consensus trigger), blacksmith-v2.md, spec-v2.md
 
-**2026-02-18 20:32 GMT:**
-- ✅ Epic 1.5 complete (7/7 criteria)
-- 🏗️ Orchestrator built: foundry-blacksmith-v1.md (334 lines)
-- 📋 Briefing tested: success/rejection/failure paths
-- ⏰ Cron created (disabled, awaiting approval)
-
-**2026-02-18 20:24 GMT:**
-- 🏗️ Epic 1.5 started (Coordination & Morning Briefing)
-- ✅ Epic 1.4 complete (10/10 criteria) - FIRST AUTONOMOUS BUILD! 🏭
-- 🎉 Built: pdf-privacy-tools (7m 20s, 13 files, $0.47)
-- 🔗 Repo: https://github.com/jeevesbot-io/foundry-20260218-pdf-privacy-tools
-
-**2026-02-18 20:08 GMT:**
-- 🏗️ Epic 1.4 started (Builder - Aider Integration)
-- ✅ Epic 1.3 complete (6/6 criteria)
-- ✅ APPROVED: pdf-privacy-tools (browser PDF toolkit, score: 9/10)
-- 🔨 Stack: TypeScript + Vite + pdf-lib, 4-5 hour build
-
-**2026-02-18 20:02 GMT:**
-- 🏗️ Epic 1.3 started (Spec Writer - Trend Selection)
-- ✅ Epic 1.2 complete (8/8 criteria)
-- 📊 Normalized: 114 raw → 95 dedup → 94 filtered → top 15
-- 🎯 Top trend: AsteroidOS 2.0 (score: 7/10)
-
-**2026-02-18 20:00 GMT:**
-- 🏗️ Epic 1.2 started (Normalization & Scoring)
-- ✅ Epic 1.1 complete (10/11 criteria, X auth deferred)
-- 📊 Test scan: 114 trends (HN: 70, Reddit: 44)
-- ⏸️ X/Twitter deferred (needs browser cookies, not blocking)
-
-**2026-02-18 19:51 GMT:**
-- 📝 Updated documentation with Epic 1.1 progress
-- 📝 Reorganized docs (numbered 01-23, removed duplicates)
-- 📝 Merged README files into single `01-README.md`
-
-**2026-02-18 19:30 GMT:**
-- 🏗️ Epic 1.1 started (The Blacksmith spawned)
-- ✅ Foundry agents registered in OpenClaw config
-- ✅ Gateway restarted with new agent configs
-
-**2026-02-18 19:23 GMT:**
-- ✅ Agent naming finalized (Option A: foundry-blacksmith, foundry-scout, etc.)
-- ✅ Architecture updated (The Blacksmith as coordinator, not Jeeves)
-- ✅ Committed to git (commit af75f55)
-
-**2026-02-18 18:56 GMT:**
-- ✅ Full project approved by Nick (all 3 phases)
-- ✅ All 16 epics loaded into War Room
+**2026-02-18:**
+- Phase 1 complete: all 5 epics delivered
+- First autonomous build: pdf-privacy-tools
+- Cron enabled for nightly runs
 
 ---
 
 ## Next Milestones
 
-**Immediate (Epic 1.1 completion):**
-- First successful test scan with real API data
-- 30-50 trends collected from HN + Reddit + X
-- Valid `trends-raw.json` output (schema v1)
-- Git commit with Epic 1.1 complete
+**Immediate:**
+1. Verify cron jobs execute successfully (engagement, forecast, cleanup)
+2. Monitor Phase 2 agents in production for 1 week
 
-**Short-term (Phase 1):**
-- Epic 1.2: Buildability scoring working
-- Epic 1.3: Spec Writer selecting/rejecting trends
-- Epic 1.4: Builder creating first autonomous build
-- Epic 1.5: Morning briefing delivered at 08:00
-
-**Medium-term (Phase 1 exit):**
-- 5 consecutive autonomous nights
-- 3+ successful builds in GitHub
-- Stable, reliable pipeline
+**Short-term (Phase 3):**
+1. Epic 3.1: Voice Guide & Manual Posting
+2. Nick manual posting phase (2-3 weeks)
 
 ---
 
 ## Links
 
 - **War Room:** http://localhost:3333 (filter by "The Foundry")
-- **Design Docs:** `~/projects/the-foundry/docs/` (16 files, numbered 01-23)
-- **Implementation Plan:** `docs/10-Implementation-Plan-Epics.md`
-- **Git Repo:** `~/projects/the-foundry/` (local only, no remote)
+- **Design Docs:** `~/projects/the-foundry/docs/` (23 files)
+- **Master Status:** `MASTER-STATUS.md`
+- **Git Repo:** `~/projects/the-foundry/`
 
 ---
 
-**Project Owner:** Nick Solly  
-**Created:** 2026-02-18  
+**Project Owner:** Nick Solly
+**Created:** 2026-02-18
 **Tagline:** "You sleep. We build."

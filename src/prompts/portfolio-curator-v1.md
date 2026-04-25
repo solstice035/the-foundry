@@ -216,7 +216,7 @@ Generate 3-5 **actionable** recommendations based on data:
 ### Multiple failures
 - Flag build failures as priority
 - Suggest reviewing build timeout settings
-- Check if aider model needs upgrading
+- Check if Claude Code ACP sessions are completing successfully
 
 ### Source downtime
 - If a source failed all week, note it clearly

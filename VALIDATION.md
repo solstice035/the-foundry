@@ -126,7 +126,7 @@
 ## Epic 1.4: Builder - Aider Integration
 
 ### ✅ Prerequisites
-- [x] aider installed: v0.86.1 (Homebrew)
+- [x] ~~aider~~ REPLACED: Claude Code via ACP (agentId: "claude") — free under Claude Max
 - [x] GitHub authenticated: jeevesbot-io (gh CLI)
 
 ### ✅ Build Execution
@@ -360,7 +360,7 @@
 3. ✅ **Test GitHub auth** - DONE
 
 ### 📋 SHORT-TERM (After 1-2 Autonomous Runs)
-1. **Monitor aider behavior** - Different models may behave differently
+1. ~~Monitor aider behavior~~ — aider removed, replaced by Claude Code ACP
 2. **Validate dedup logic** - Test with similar trends
 3. **Refine buildability scoring** - Adjust thresholds if needed
 4. **Add X/Twitter auth** - Browser cookie setup (optional)

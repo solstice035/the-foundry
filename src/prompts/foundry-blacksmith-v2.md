@@ -99,7 +99,7 @@ Output: ~/.openclaw/workspace/foundry/YYYY-MM-DD/spec.json
 
 **Spawn:** `foundry-builder` sub-agent with task:
 ```
-Run The Foundry Builder. Read src/prompts/foundry-builder-v1.md and execute the full build workflow.
+Run The Foundry Builder. Read src/prompts/foundry-builder-v4-claude-code.md and execute the full build workflow.
 Read spec.json from ~/.openclaw/workspace/foundry/YYYY-MM-DD/
 Build the project, test locally, push to GitHub.
 Output: ~/.openclaw/workspace/foundry/YYYY-MM-DD/build.json
@@ -250,7 +250,7 @@ For failure type, include:
 {
   "failure": {
     "stage": "builder",
-    "error": "aider timed out after 5 hours",
+    "error": "claude-code-acp session timed out after 8 hours",
     "partial_progress": "8/10 features implemented",
     "local_path": "~/projects/foundry/20260218-pdf-privacy-tools",
     "next_steps": "Manual review or retry tomorrow"
