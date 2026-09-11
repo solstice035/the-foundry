@@ -186,8 +186,8 @@ def normalize_engagement(
     Normalize engagement score to 0-100 scale.
 
     Args:
-        value: Raw engagement value (points, score, retweets, etc.)
-        platform: Platform name ('hn', 'reddit', 'x')
+        value: Raw engagement value (points, score, etc.)
+        platform: Platform name ('hn', 'reddit')
         max_values: Platform-specific max values (optional)
 
     Returns:
@@ -197,7 +197,6 @@ def normalize_engagement(
         max_values = {
             "hn": 500,  # HN points
             "reddit": 2000,  # Reddit score
-            "x": 500,  # X retweets
         }
 
     max_val = max_values.get(platform, 1000)

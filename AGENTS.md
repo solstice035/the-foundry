@@ -133,11 +133,11 @@ If you're approaching timeout:
 
 ### foundry-scout (Trend Scout)
 
-**Mission:** Scan HN, Reddit, X for trending developer pain points
+**Mission:** Scan HN and Reddit for trending developer pain points
 
 **Your responsibilities:**
-1. Fetch data from 3 sources (HN Algolia, Reddit JSON, X bird CLI)
-2. Normalize engagement signals (HN points, Reddit score, X retweets → 0-100)
+1. Fetch data from 2 sources (HN Algolia, Reddit JSON)
+2. Normalize engagement signals (HN points, Reddit score → 0-100)
 3. Score buildability (5 dimensions, explicit rubric)
 4. Cross-source deduplication (same URL, fuzzy title match)
 5. Check `history.json` (flag previously built trends)
@@ -348,16 +348,16 @@ from src.utils import extract_keywords, jaccard_similarity, normalize_engagement
 ```json
 {
   "schema_version": 1,
-  "sources_attempted": ["hn", "reddit", "x"],
-  "sources_succeeded": ["hn", "reddit"],
+  "sources_attempted": ["hn", "reddit"],
+  "sources_succeeded": ["hn"],
   "sources_failed": [
     {
-      "source": "x",
-      "error": "bird CLI timeout after 60s",
+      "source": "reddit",
+      "error": "HTTP 429 (rate limited) on r/programming",
       "fallback_attempted": false
     }
   ],
-  "data_quality": "good",
+  "data_quality": "degraded",
   "trends": [ ... ]
 }
 ```
@@ -504,8 +504,8 @@ Write a minimal output file with error details:
 {
   "schema_version": 1,
   "status": "failed",
-  "error": "Critical failure: HN API returned 500 for all queries, Reddit blocked (403), X bird CLI missing",
-  "attempted_recovery": ["Retried HN 3 times", "Tried old.reddit.com fallback", "Checked bird CLI installation"],
+  "error": "Critical failure: HN API returned 500 for all queries, Reddit blocked (403)",
+  "attempted_recovery": ["Retried HN 3 times", "Tried old.reddit.com fallback"],
   "recommendation": "Manual investigation needed. Pipeline should abort for tonight."
 }
 ```

@@ -22,7 +22,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 - **CLI:** click
 - **Logging:** structlog (structured logging)
 - **Build tool (downstream):** aider (LLM-assisted code generation)
-- **External APIs:** HN Algolia, Reddit JSON, X/Twitter
+- **External APIs:** HN Algolia, Reddit JSON
 
 ## Architecture
 
@@ -184,7 +184,6 @@ Key variables from `.env.example`:
 | `ANTHROPIC_API_KEY` | Claude models for aider |
 | `GITHUB_TOKEN` | Builder creates repos (scope: repo, workflow) |
 | `GITHUB_USERNAME` | GitHub account for repo creation |
-| `X_AUTH_TOKEN`, `X_CT0` | X/Twitter for Trend Scout |
 | `OPENCLAW_GATEWAY_URL` | OpenClaw gateway (default: localhost:4445) |
 | `FOUNDRY_WORKSPACE` | Runtime data path (~/.openclaw/workspace/foundry) |
 | `FOUNDRY_BUILDS` | Where Builder creates projects (~/projects/foundry) |
@@ -274,7 +273,6 @@ Key variables from `.env.example`:
 - **GitHub:** Repos created under `jeevesbot-io` account
 - **HN Algolia API:** `http://hn.algolia.com/api/v1/search` (public, no auth)
 - **Reddit JSON:** `https://www.reddit.com/r/{subreddit}/hot.json` (public, may rate-limit)
-- **X/Twitter:** Requires auth tokens extracted from browser session
 
 ## Key Documents to Read First
 

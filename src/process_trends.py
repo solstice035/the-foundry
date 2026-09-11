@@ -228,14 +228,11 @@ def normalize_engagement(value: float, source: str) -> float:
     Formulas from design docs:
     - HN points: min(100, points / 5)
     - Reddit score: min(100, score / 10)
-    - X retweets: min(100, retweets / 2)
     """
     if source == "hn":
         return min(100.0, value / 5.0)
     elif source == "reddit":
         return min(100.0, value / 10.0)
-    elif source == "x":
-        return min(100.0, value / 2.0)
     else:
         return min(100.0, value / 10.0)
 
