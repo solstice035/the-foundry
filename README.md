@@ -1,5 +1,8 @@
 # The Foundry 🏭
 
+> [!NOTE]
+> This README is the original design-stage overview, kept as a record. The current overview, including what this branch adds, is the [`main` README](https://github.com/solstice035/the-foundry#readme).
+
 **Autonomous overnight app factory**
 
 *"You sleep. We build."*
@@ -9,7 +12,7 @@
 ## What This Is
 
 The Foundry is an autonomous multi-agent system that:
-1. Scans trending developer pain points on X, Reddit, and Hacker News
+1. Scans trending developer pain points on Reddit and Hacker News
 2. Selects one buildable trend per night
 3. Builds an MVP while you sleep (using Claude Code via ACP — free)
 4. Pushes to GitHub and delivers a morning briefing
@@ -93,7 +96,7 @@ the-foundry/
 
 ## License
 
-Private project. No public release planned.
+See the README on `main` for the current overview.
 
 ---
 

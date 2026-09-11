@@ -31,7 +31,7 @@ Multi-agent pipeline orchestrated by The Blacksmith:
 ```
 The Blacksmith (foundry-blacksmith, Sonnet) -- coordinator
   |
-  +-- 00:00-00:45  Trend Scout (foundry-scout, Haiku) -- scans HN, Reddit, X
+  +-- 00:00-00:45  Trend Scout (foundry-scout, Haiku) -- scans HN, Reddit
   +-- 00:45-01:30  Spec Writer (foundry-spec, Sonnet) -- evaluates & selects
   +-- 01:30-07:00  Builder (foundry-builder, Sonnet + aider) -- builds MVP
   +-- 08:00        Morning Briefing
@@ -222,7 +222,7 @@ Key variables from `.env.example`:
 
 ### Testing
 
-- Mock external APIs (HN, Reddit, X, GitHub) using `responses` library
+- Mock external APIs (HN, Reddit, GitHub) using `responses` library
 - Test failure modes: timeouts, rate limits, bad data, missing sources
 - Integration tests for multi-agent handoffs (Scout output -> Spec Writer input)
 - All scoring logic must be deterministic (same input -> same output)

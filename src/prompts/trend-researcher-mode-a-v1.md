@@ -43,7 +43,7 @@ Replace `YYYY-MM-DD` with today's date.
 
 Read `~/.openclaw/workspace/foundry/YYYY-MM-DD/trends-raw.json`.
 
-This contains raw trends from HN, Reddit, X with basic metadata:
+This contains raw trends from HN and Reddit with basic metadata:
 - `id`, `title`, `url`, `source`, `engagement` (platform-specific scores)
 
 ### Step 2: Load Trend History
