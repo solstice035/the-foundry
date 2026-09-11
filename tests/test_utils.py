@@ -162,12 +162,6 @@ class TestEngagementNormalization:
         score = normalize_engagement(1000, 'reddit')
         assert score == 50.0
     
-    def test_x_normalization(self):
-        """Test X retweets normalization"""
-        # 100 retweets on X (max 500)
-        score = normalize_engagement(100, 'x')
-        assert score == 20.0
-    
     def test_max_capping(self):
         """Test that scores are capped at 100"""
         # 1000 points on HN (exceeds max 500)

@@ -106,7 +106,6 @@ the-foundry/
   
   - Implemented HN Algolia API integration
   - Added Reddit JSON endpoint fetching (5 subreddits)
-  - X/Twitter bird CLI searches (3 queries)
   - Per-source timeout enforcement (5 min)
   - Tests: individual source validation
   
@@ -150,17 +149,16 @@ the-foundry/
 ```
 You are the Trend Scout for The Foundry.
 
-Mission: Scan HN, Reddit, and X for trending developer pain points.
+Mission: Scan HN and Reddit for trending developer pain points.
 
 Data sources:
 1. HN Algolia API: http://hn.algolia.com/api/v1/search?tags=story&numericFilters=created_at_i>{unix_24h_ago}
 2. Reddit JSON: https://www.reddit.com/r/programming/hot.json?limit=25
-3. X via bird CLI: bird search "#buildinpublic" -n 30
 
 For each source:
 - Timeout: 5 minutes
 - If fails: log error, continue with remaining sources
-- Minimum: 2/3 sources must succeed
+- Minimum: 1 of 2 sources must succeed
 
 Output: ~/.openclaw/workspace/foundry/YYYY-MM-DD/trends-raw.json
 Schema: See docs/Deep Dive - Trend Research.md, section "Common Trend Schema"

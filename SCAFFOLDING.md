@@ -140,7 +140,6 @@ Before starting Epic 1.1, verify:
 - [ ] Fill in credentials:
   - [ ] `ANTHROPIC_API_KEY` (for aider)
   - [ ] `GITHUB_TOKEN` (for repo creation)
-  - [ ] `X_AUTH_TOKEN` / `X_CT0` (for bird CLI)
 - [ ] Install Python dependencies: `pip install -r requirements.txt`
 - [ ] Run workspace initialization: `./scripts/init_workspace.sh`
 - [ ] Verify workspace created: `ls ~/.openclaw/workspace/foundry/`
@@ -157,7 +156,6 @@ Before starting Epic 1.1, verify:
 
 - [ ] Verify `aider` installed: `which aider`
 - [ ] Verify `gh` CLI authenticated: `gh auth status`
-- [ ] Verify `bird` CLI working: `bird search "test" -n 1`
 - [ ] Verify `git` configured: `git config user.name`
 
 ### Testing
