@@ -44,7 +44,13 @@ The test scan pulled 114 posts (HN 70, Reddit 44), deduplicated them to 95 and s
 
 The one missed criterion in 1.1 was an X/Twitter source. It needed browser-cookie auth, so it was deferred, never ran, and has since been removed.
 
-The plan runs to 16 epics across three phases. Phase 1 is what's documented here.
+The plan runs to 16 epics across three phases, and `main` documents Phase 1. The [`feature/foundry-dashboard`](https://github.com/solstice035/the-foundry/tree/feature/foundry-dashboard) branch carries what came next:
+
+- **Phase 2, six feedback-loop epics:** history-based dedup, build metrics, trend lifecycle tracking, forecasting, a consensus analyst and GitHub engagement monitoring
+- **A Vue dashboard** over the pipeline's data
+- **Early Phase 3:** a voice guide and a content drafter that prepares build announcements for me to approve before anything is posted
+
+In late April the aider builder prompts were archived and a Claude Code builder prompt (`foundry-builder-v4-claude-code.md`) was added on the same branch. Every build listed below predates that change.
 
 ## What it shipped
 
