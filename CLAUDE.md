@@ -10,7 +10,7 @@
 
 The Foundry is a multi-agent system that:
 1. **The Blacksmith** (foundry-blacksmith) coordinates the overnight pipeline
-2. **Trend Scout** (foundry-scout) scans trending developer pain points (X, Reddit, HN) at midnight
+2. **Trend Scout** (foundry-scout) scans trending developer pain points (Reddit, HN) at midnight
 3. **Spec Writer** (foundry-spec) selects one buildable trend
 4. **Builder** (foundry-builder) builds an MVP overnight using aider + LLM
 5. Pushes to GitHub and delivers a morning briefing at 8am
@@ -76,7 +76,7 @@ the-foundry/
 - Validate before committing (schema checkers)
 
 **Testing (tests/):**
-- Mock external APIs (HN, Reddit, X, GitHub)
+- Mock external APIs (HN, Reddit, GitHub)
 - Test failure modes (timeouts, rate limits, bad data)
 - Integration tests for multi-agent handoffs
 - Run before every commit

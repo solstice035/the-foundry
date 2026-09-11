@@ -35,7 +35,7 @@ Execute stages sequentially. Each stage spawns a sub-agent, waits for completion
 **Spawn:** `foundry-scout` sub-agent with task:
 ```
 Run The Foundry Trend Scout. Read src/prompts/foundry-scout-v2.md and execute the full trend scanning pipeline.
-Scan HN, Reddit, and X for trending developer pain points.
+Scan HN and Reddit for trending developer pain points.
 Score and rank by buildability.
 Output: ~/.openclaw/workspace/foundry/YYYY-MM-DD/trends-summary.json
 ```
